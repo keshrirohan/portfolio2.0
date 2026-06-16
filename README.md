@@ -1,36 +1,169 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio
+
+A work-in-progress full-stack portfolio built with Next.js, React, TypeScript,
+Tailwind CSS, and MongoDB.
+
+The current app is a starter foundation: it has a polished landing page, basic
+project metadata, API routes, request validation, MongoDB connection handling,
+linting, formatting, and environment variable examples.
+
+## Tech Stack
+
+- Next.js – React framework for building full-stack web apps (frontend + backend).
+- React – JavaScript library for creating interactive user interfaces.
+- TypeScript – Adds type safety to JavaScript, reducing bugs.
+- Tailwind CSS – Utility-first CSS framework for fast UI styling.
+- MongoDB Node.js Driver – Connects Node.js applications directly to MongoDB databases.
+- Zod – Validates forms, APIs, and data with TypeScript support.
+- React Hook Form – Handles forms efficiently with validation and minimal re-renders.
+- ESLint – Finds and fixes code quality issues.
+- Prettier – Automatically formats code consistently.
+- Lucide React – Modern SVG icons for React applications.
+
+## Current Features
+
+- Responsive portfolio homepage in `src/app/page.tsx`
+- Global layout and metadata in `src/app/layout.tsx`
+- Tailwind-powered global styles in `src/app/globals.css`
+- Health check endpoint at `GET /api/health`
+- Contact message endpoint at `POST /api/contact`
+- Contact payload validation with Zod
+- Reusable MongoDB client helper with development connection caching
+- Example environment file in `.env.example`
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
+
+```bash
+npm install
+```
+
+Create your local environment file:
+
+```bash
+cp .env.example .env
+```
+
+Update `.env` if needed:
+
+```env
+MONGODB_URI="mongodb://127.0.0.1:27017"
+MONGODB_DB="portfolio"
+```
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open the app at:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Starts the local development server.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Creates a production build.
 
-## Deploy on Vercel
+```bash
+npm run start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Starts the production server after building.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run lint
+```
+
+Runs ESLint.
+
+```bash
+npm run format
+```
+
+Formats the project with Prettier.
+
+## API Routes
+
+### `GET /api/health`
+
+Returns a basic JSON health response:
+
+```json
+{
+  "ok": true,
+  "app": "portfolio",
+  "database": "mongodb",
+  "timestamp": "2026-06-16T00:00:00.000Z"
+}
+```
+
+### `POST /api/contact`
+
+Stores a validated contact message in MongoDB.
+
+Expected request body:
+
+```json
+{
+  "name": "Your Name",
+  "email": "you@example.com",
+  "message": "Your message goes here."
+}
+```
+
+Successful response:
+
+```json
+{
+  "id": "inserted-mongodb-document-id"
+}
+```
+
+Invalid requests return `400` with validation details.
+
+## Project Structure
+
+```text
+src/
+  app/
+    api/
+      contact/route.ts
+      health/route.ts
+    globals.css
+    layout.tsx
+    page.tsx
+  lib/
+    validations/contact.ts
+    mongodb.ts
+    utils.ts
+```
+
+## Environment Variables
+
+| Variable | Required | Description |
+| --- | --- | --- |
+| `MONGODB_URI` | Yes | MongoDB connection string. |
+| `MONGODB_DB` | No | Database name. Defaults to `portfolio`. |
+
+## Notes
+
+- The homepage is currently a starter portfolio shell and can be customized with
+  real personal details, projects, experience, and contact UI.
+- The contact API is ready for a form, but the visible form has not been added
+  yet.
+- This project uses Next.js 16, so check the local Next.js docs in
+  `node_modules/next/dist/docs/` before changing framework APIs or conventions.
