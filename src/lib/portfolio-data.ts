@@ -3,7 +3,7 @@ import {
   Braces,
   Code2,
   Database,
-  Github,
+  GitBranch,
   Globe2,
   Layers3,
   Mail,
@@ -119,7 +119,7 @@ export const services = [
 
 export const contactLinks = [
   { label: "Email", href: `mailto:${profile.email}`, icon: Mail },
-  { label: "GitHub", href: "https://github.com/", icon: Github },
+  { label: "GitHub", href: "https://github.com/", icon: GitBranch },
   { label: "Portfolio", href: "#home", icon: Globe2 },
 ];
 
