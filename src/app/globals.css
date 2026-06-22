@@ -47,6 +47,32 @@
   --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.6);
 }
 
+/* ─── Light Theme Overrides ──────────────────────────────────────────────── */
+[data-theme="light"] {
+  --color-background: #fafafa;
+  --color-surface: #f4f4f5;
+  --color-surface-2: #e4e4e7;
+  --color-surface-3: #d4d4d8;
+  --color-border: #e4e4e7;
+  --color-border-subtle: #f0f0f0;
+  --color-foreground: #09090b;
+  --color-foreground-muted: #52525b;
+  --color-foreground-subtle: #a1a1aa;
+  --shadow-glow: 0 0 40px rgba(237, 114, 42, 0.12);
+  --shadow-glow-sm: 0 0 20px rgba(237, 114, 42, 0.08);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] body {
+  background-color: #fafafa;
+  color: #09090b;
+}
+
+[data-theme="light"] .glass {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
 /* ─── Base Reset & Global Styles ───────────────────────────────────────── */
 *,
 *::before,
@@ -63,6 +89,12 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /* Hide default cursor only on non-touch desktop */
+  cursor: none;
+}
+
+@media (pointer: coarse) {
+  html { cursor: auto; }
 }
 
 body {
@@ -72,6 +104,25 @@ body {
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
+}
+
+/* ─── Skip-to-content link ──────────────────────────────────────────────── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.5rem 1rem;
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.875rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0;
 }
 
 /* ─── Selection ────────────────────────────────────────────────────────── */
