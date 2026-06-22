@@ -1,12 +1,11 @@
 /**
  * Re-export all page sections from a single entry point.
- * Example: import { Hero, About } from "@/sections";
+ * Example: import { Hero } from "@/sections";
  */
 
-// Sections will be added here as the project grows.
-// export { Hero } from "./Hero";
-// export { About } from "./About";
-// export { Skills } from "./Skills";
-// export { Projects } from "./Projects";
-// export { Experience } from "./Experience";
-// export { Contact } from "./Contact";
+export { default as Hero } from "./Hero";
+// export { default as About } from "./About";
+// export { default as Skills } from "./Skills";
+// export { default as Projects } from "./Projects";
+// export { default as Experience } from "./Experience";
+// export { default as Contact } from "./Contact";
