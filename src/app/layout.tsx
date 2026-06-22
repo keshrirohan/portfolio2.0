@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -18,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | Rohan Keshri",
   },
   description:
-    "Premium full-stack portfolio for Rohan Keshri, Software Engineer, Full Stack Developer, MERN Stack Developer, React Developer, and Next.js Developer.",
+    "Premium full-stack portfolio for Rohan Keshri — Software Engineer, Full Stack Developer, MERN Stack Developer, React & Next.js Developer.",
   keywords: [
     "Rohan Keshri",
     "Software Engineer",
@@ -58,9 +60,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="bg-black text-white antialiased min-h-screen overflow-x-hidden">
+        {children}
+      </body>
     </html>
   );
 }
