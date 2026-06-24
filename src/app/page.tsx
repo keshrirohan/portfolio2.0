@@ -7,6 +7,8 @@ import {
   Education,
   Certifications,
   Achievements,
+  CMSCertificates,
+  CMSGallery,
   Contact,
 } from "@/sections";
 
@@ -21,6 +23,8 @@ export default function Home() {
       <Education />
       <Certifications />
       <Achievements />
+      <CMSCertificates />
+      <CMSGallery />
       <Contact />
     </main>
   );
