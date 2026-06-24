@@ -389,7 +389,7 @@ export default function Experience() {
   useGsapReveal(".experience-card", containerRef);
 
   return (
-    <section id="experience" aria-label="Experience section" className="relative bg-black overflow-hidden">
+    <section id="experience" aria-label="Experience section" className="relative overflow-hidden" style={{ background: "var(--color-background)" }}>
       <div className="absolute top-0 left-0 right-0 h-px"
         style={{ background: "linear-gradient(90deg,transparent,rgba(237,114,42,0.3),transparent)" }} />
 

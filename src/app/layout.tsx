@@ -146,6 +146,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Prevent theme flash — runs before React hydrates */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(!t)t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`,
+          }}
+        />
         {/* Structured data — Person schema */}
         <script
           type="application/ld+json"
@@ -174,7 +180,13 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-black text-white antialiased min-h-screen overflow-x-hidden">
+      <body
+        className="antialiased min-h-screen overflow-x-hidden"
+        style={{
+          backgroundColor: "var(--color-background)",
+          color: "var(--color-foreground)",
+        }}
+      >
         <ThemeProvider>
           {/* Accessibility: skip to main content */}
           <a href="#main-content" className="skip-link">
@@ -187,8 +199,12 @@ export default function RootLayout({
           <ScrollProgressBar />
           <Navbar />
 
-          {/* Page content */}
-          <main id="main-content" tabIndex={-1} className="outline-none">
+          {/* Page content — pt-16 offsets the fixed 56-72px navbar */}
+          <main
+            id="main-content"
+            tabIndex={-1}
+            className="outline-none pt-16"
+          >
             {children}
           </main>
         </ThemeProvider>

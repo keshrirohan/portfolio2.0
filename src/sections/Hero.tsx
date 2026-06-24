@@ -365,7 +365,8 @@ export default function Hero() {
     <section
       id="home"
       aria-label="Hero section"
-      className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black"
+      className="relative w-full min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center overflow-hidden"
+      style={{ background: "var(--color-background)" }}
     >
       {/* Particle background — client only to avoid SSR issues */}
       {mounted && <ParticlesBg />}
@@ -380,7 +381,7 @@ export default function Hero() {
 
       {/* ── Main Content ── */}
       <motion.div
-        className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto"
+        className="relative z-10 flex flex-col items-center text-center px-4 sm:px-6 max-w-4xl mx-auto w-full py-10 sm:py-16"
         variants={container}
         initial="hidden"
         animate="show"
@@ -401,7 +402,7 @@ export default function Hero() {
         {/* Name */}
         <motion.h1
           variants={item}
-          className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight leading-none mb-4"
+          className="text-4xl sm:text-6xl lg:text-8xl font-black tracking-tight leading-none mb-3 sm:mb-4"
         >
           <span className="block text-white">Rohan</span>
           <span
@@ -436,7 +437,7 @@ export default function Hero() {
         {/* Bio */}
         <motion.p
           variants={item}
-          className="text-base sm:text-lg text-white/50 max-w-xl leading-relaxed mb-10"
+          className="text-sm sm:text-base md:text-lg text-white/50 max-w-xl leading-relaxed mb-8 sm:mb-10 px-2 sm:px-0"
         >
           Crafting{" "}
           <span className="text-white/80 font-medium">scalable, performant</span> web experiences
@@ -500,9 +501,9 @@ export default function Hero() {
       {/* Bottom gradient fade */}
       <div
         aria-hidden="true"
-        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+        className="absolute bottom-0 left-0 right-0 h-24 sm:h-32 pointer-events-none"
         style={{
-          background: "linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%)",
+          background: "linear-gradient(to top, var(--color-background) 0%, transparent 100%)",
         }}
       />
     </section>

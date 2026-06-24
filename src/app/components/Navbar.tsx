@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useTheme } from "@/components/ThemeProvider";
 
 const NAV_LINKS = [
   { label: "About",       href: "#about" },
@@ -17,6 +18,8 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -45,11 +48,13 @@ export default function Navbar() {
         style={{
           height: scrolled ? "56px" : "72px",
           background: scrolled
-            ? "rgba(0,0,0,0.85)"
+            ? isDark ? "rgba(0,0,0,0.88)" : "rgba(248,248,248,0.9)"
             : "transparent",
           backdropFilter: scrolled ? "blur(16px)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(255,255,255,0.05)" : "none",
+          borderBottom: scrolled
+            ? isDark ? "1px solid rgba(255,255,255,0.05)" : "1px solid rgba(0,0,0,0.07)"
+            : "none",
         }}
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}

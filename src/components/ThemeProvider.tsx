@@ -7,11 +7,13 @@ type Theme = "dark" | "light";
 interface ThemeContextValue {
   theme: Theme;
   toggle: () => void;
+  mounted: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
   theme: "dark",
   toggle: () => {},
+  mounted: false,
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
@@ -19,13 +21,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    // Read stored or system preference
     const stored = localStorage.getItem("theme") as Theme | null;
     const preferred =
       stored ??
       (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     setTheme(preferred);
+    // Apply immediately to avoid flash
     document.documentElement.setAttribute("data-theme", preferred);
+    setMounted(true);
   }, []);
 
   const toggle = () => {
@@ -37,11 +41,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  // Prevent flash of wrong theme — render children only after mount
-  if (!mounted) return null;
-
   return (
-    <ThemeContext.Provider value={{ theme, toggle }}>
+    // Always render children — use visibility trick to avoid hydration mismatch
+    <ThemeContext.Provider value={{ theme, toggle, mounted }}>
       {children}
     </ThemeContext.Provider>
   );

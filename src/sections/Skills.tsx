@@ -373,7 +373,7 @@ export default function Skills() {
   const activeCategory = CATEGORIES.find((c) => c.id === activeId) ?? CATEGORIES[0];
 
   return (
-    <section id="skills" aria-label="Skills section" className="relative bg-black overflow-hidden">
+    <section id="skills" aria-label="Skills section" className="relative overflow-hidden" style={{ background: "var(--color-background)" }}>
       {/* Top gradient border */}
       <div className="absolute top-0 left-0 right-0 h-px"
         style={{ background: "linear-gradient(90deg,transparent,rgba(237,114,42,0.3),transparent)" }} />

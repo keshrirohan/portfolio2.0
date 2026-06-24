@@ -255,7 +255,8 @@ export function Education() {
     <section
       id="education"
       aria-label="Education section"
-      className="relative bg-black overflow-hidden"
+      className="relative overflow-hidden"
+      style={{ background: "var(--color-background)" }}
     >
       {/* Top separator */}
       <div
@@ -454,7 +455,8 @@ export function Certifications() {
     <section
       id="certifications"
       aria-label="Certifications section"
-      className="relative bg-black overflow-hidden"
+      className="relative overflow-hidden"
+      style={{ background: "var(--color-background)" }}
     >
       {/* Top separator */}
       <div
@@ -730,7 +732,8 @@ export function Achievements() {
     <section
       id="achievements"
       aria-label="Achievements section"
-      className="relative bg-black overflow-hidden"
+      className="relative overflow-hidden"
+      style={{ background: "var(--color-background)" }}
     >
       {/* Top separator */}
       <div

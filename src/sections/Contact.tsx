@@ -491,7 +491,7 @@ export default function Contact() {
   const inView = useInView(containerRef, { once: true, margin: "-60px" });
 
   return (
-    <section id="contact" aria-label="Contact section" className="relative bg-black overflow-hidden">
+    <section id="contact" aria-label="Contact section" className="relative overflow-hidden" style={{ background: "var(--color-background)" }}>
       {/* Top gradient border */}
       <div
         className="absolute top-0 left-0 right-0 h-px"

@@ -273,7 +273,7 @@ export default function CMSGallery() {
   if (!loading && data && data.total === 0 && !category) return null;
 
   return (
-    <section id="gallery" aria-label="Gallery section" className="relative bg-black overflow-hidden">
+    <section id="gallery" aria-label="Gallery section" className="relative overflow-hidden" style={{ background: "var(--color-background)" }}>
       <div className="absolute top-0 left-0 right-0 h-px"
         style={{ background: "linear-gradient(90deg,transparent,rgba(129,140,248,0.3),transparent)" }} />
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] pointer-events-none"

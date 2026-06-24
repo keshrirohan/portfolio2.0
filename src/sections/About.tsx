@@ -263,7 +263,7 @@ function SectionHeader({ tag, title, subtitle }: { tag: string; title: React.Rea
 ───────────────────────────────────────────────────── */
 export default function About() {
   return (
-    <section id="about" aria-label="About section" className="relative bg-black overflow-hidden">
+    <section id="about" aria-label="About section" className="relative overflow-hidden" style={{ background: "var(--color-background)" }}>
       {/* Subtle top gradient border */}
       <div className="absolute top-0 left-0 right-0 h-px"
         style={{ background: "linear-gradient(90deg, transparent, rgba(237,114,42,0.3), transparent)" }} />
