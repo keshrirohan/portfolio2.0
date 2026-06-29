@@ -195,21 +195,22 @@ function CategoryTab({
   return (
     <button
       onClick={onClick}
-      className="relative flex flex-col sm:flex-row items-center sm:items-start gap-2 p-3 sm:p-4 rounded-xl transition-all duration-300 text-left w-full group"
+      className="relative flex flex-col sm:flex-row items-center sm:items-start gap-2 p-3 sm:p-4 rounded-xl transition-all duration-300 text-left flex-shrink-0 sm:w-full group"
       style={{
         background: active
           ? `linear-gradient(135deg, ${cat.accent}15, ${cat.accent}05)`
-          : "rgba(255,255,255,0.02)",
-        border: `1px solid ${active ? cat.accent + "30" : "rgba(255,255,255,0.05)"}`,
+          : "rgba(128,128,128,0.06)",
+        border: `1px solid ${active ? cat.accent + "30" : "rgba(128,128,128,0.1)"}`,
         boxShadow: active ? `0 0 20px ${cat.accent}10` : "none",
+        minWidth: "80px",
       }}
       aria-pressed={active}
     >
-      {/* Active indicator pill */}
+      {/* Active indicator pill — left bar on lg, bottom bar on mobile */}
       {active && (
         <motion.div
           layoutId="tab-indicator"
-          className="absolute left-0 top-1/4 bottom-1/4 w-0.5 rounded-full"
+          className="absolute left-0 top-1/4 bottom-1/4 w-0.5 rounded-full hidden sm:block"
           style={{ background: cat.accent }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         />
@@ -218,24 +219,30 @@ function CategoryTab({
       <div
         className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300"
         style={{
-          background: active ? `${cat.accent}20` : "rgba(255,255,255,0.04)",
-          border: `1px solid ${active ? cat.accent + "30" : "rgba(255,255,255,0.06)"}`,
+          background: active ? `${cat.accent}20` : "rgba(128,128,128,0.08)",
+          border: `1px solid ${active ? cat.accent + "30" : "rgba(128,128,128,0.1)"}`,
         }}
       >
-        <Icon size={15} style={{ color: active ? cat.accent : "#52525b" }} strokeWidth={2} />
+        <Icon size={15} style={{ color: active ? cat.accent : "var(--color-foreground-subtle)" }} strokeWidth={2} />
       </div>
 
-      <div className="hidden sm:block">
+      <div className="hidden sm:block min-w-0">
         <p
-          className="text-sm font-bold transition-colors duration-200"
-          style={{ color: active ? "#ffffff" : "#71717a" }}
+          className="text-sm font-bold transition-colors duration-200 truncate"
+          style={{ color: active ? "var(--color-foreground)" : "var(--color-foreground-muted)" }}
         >
           {cat.label}
         </p>
-        <p className="text-[10px] text-white/30 mt-0.5 font-medium leading-tight">
+        <p className="text-[10px] mt-0.5 font-medium leading-tight" style={{ color: "var(--color-foreground-subtle)" }}>
           {cat.skills.length} skills
         </p>
       </div>
+
+      {/* Mobile label below icon */}
+      <p className="sm:hidden text-[9px] font-bold text-center leading-tight mt-0.5"
+        style={{ color: active ? cat.accent : "var(--color-foreground-subtle)", maxWidth: "60px" }}>
+        {cat.label}
+      </p>
     </button>
   );
 }
@@ -389,22 +396,24 @@ export default function Skills() {
         <SectionHeader />
 
         {/* Main interactive layout */}
-        <div className="grid lg:grid-cols-[220px_1fr] gap-6 items-start">
-          {/* ── Tabs sidebar ── */}
+        <div className="grid lg:grid-cols-[200px_1fr] gap-6 items-start">
+          {/* ── Tabs — horizontal scroll on mobile, vertical sidebar on lg ── */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="flex lg:flex-col gap-2"
+            className="flex lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0 lg:overflow-x-visible snap-x snap-mandatory"
+            style={{ scrollbarWidth: "none" }}
           >
             {CATEGORIES.map((cat) => (
-              <CategoryTab
-                key={cat.id}
-                cat={cat}
-                active={activeId === cat.id}
-                onClick={() => setActiveId(cat.id)}
-              />
+              <div key={cat.id} className="snap-start">
+                <CategoryTab
+                  cat={cat}
+                  active={activeId === cat.id}
+                  onClick={() => setActiveId(cat.id)}
+                />
+              </div>
             ))}
 
             {/* Overall proficiency summary card */}
@@ -413,18 +422,21 @@ export default function Skills() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.5 }}
-              className="hidden lg:block mt-4 p-4 rounded-xl border border-white/5 text-center"
-              style={{ background: "rgba(255,255,255,0.02)" }}
+              className="hidden lg:block mt-4 p-4 rounded-xl border text-center flex-shrink-0"
+              style={{
+                background: "rgba(128,128,128,0.04)",
+                border: "1px solid rgba(128,128,128,0.1)",
+              }}
             >
-              <p className="text-xs text-white/30 font-medium uppercase tracking-widest mb-3">
+              <p className="text-xs font-medium uppercase tracking-widest mb-3" style={{ color: "var(--color-foreground-subtle)" }}>
                 Overall
               </p>
-              <p className="text-3xl font-black text-white">
+              <p className="text-3xl font-black" style={{ color: "var(--color-foreground)" }}>
                 <span style={{ color: "#ed722a" }}>17</span>
               </p>
-              <p className="text-xs text-white/40 mt-1">Technologies</p>
+              <p className="text-xs mt-1" style={{ color: "var(--color-foreground-subtle)" }}>Technologies</p>
               <div className="w-full h-1 rounded-full mt-3 overflow-hidden"
-                style={{ background: "rgba(255,255,255,0.06)" }}>
+                style={{ background: "rgba(128,128,128,0.15)" }}>
                 <motion.div
                   className="h-full rounded-full"
                   style={{ background: "linear-gradient(90deg,#ed722a,#f59150)" }}

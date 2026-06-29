@@ -7,16 +7,16 @@ import ThemeToggle from "@/components/ThemeToggle";
 import { useTheme } from "@/components/ThemeProvider";
 
 const NAV_LINKS = [
-  { label: "About",       href: "#about" },
-  { label: "Skills",      href: "#skills" },
-  { label: "Experience",  href: "#experience" },
-  { label: "Projects",    href: "#projects" },
-  { label: "Education",   href: "#education" },
-  { label: "Contact",     href: "#contact" },
+  { label: "About",      href: "#about" },
+  { label: "Skills",     href: "#skills" },
+  { label: "Experience", href: "#experience" },
+  { label: "Projects",   href: "#projects" },
+  { label: "Education",  href: "#education" },
+  { label: "Contact",    href: "#contact" },
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled]     = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { theme } = useTheme();
   const isDark = theme === "dark";
@@ -27,12 +27,17 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close mobile nav on resize
   useEffect(() => {
     const onResize = () => { if (window.innerWidth >= 768) setMobileOpen(false); };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
+
+  // Prevent body scroll when drawer is open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
 
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
@@ -40,20 +45,28 @@ export default function Navbar() {
     el?.scrollIntoView({ behavior: "smooth" });
   };
 
+  /* ─── Dynamic style values ─── */
+  const navText   = isDark ? "rgba(255,255,255,0.55)" : "rgba(0,0,0,0.55)";
+  const navHoverBg = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)";
+  const logoText  = isDark ? "rgba(255,255,255,0.85)" : "rgba(0,0,0,0.85)";
+  const hamBorder = isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)";
+  const hamBg     = isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.04)";
+  const hamText   = isDark ? "rgba(255,255,255,0.6)"  : "rgba(0,0,0,0.6)";
+
   return (
     <>
       <motion.header
         role="banner"
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 lg:px-8 transition-all duration-300"
         style={{
-          height: scrolled ? "56px" : "72px",
+          height: scrolled ? "56px" : "68px",
           background: scrolled
-            ? isDark ? "rgba(0,0,0,0.88)" : "rgba(248,248,248,0.9)"
+            ? isDark ? "rgba(0,0,0,0.88)" : "rgba(248,248,248,0.92)"
             : "transparent",
-          backdropFilter: scrolled ? "blur(16px)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
+          backdropFilter:       scrolled ? "blur(18px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(18px)" : "none",
           borderBottom: scrolled
-            ? isDark ? "1px solid rgba(255,255,255,0.05)" : "1px solid rgba(0,0,0,0.07)"
+            ? isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(0,0,0,0.08)"
             : "none",
         }}
         initial={{ y: -80, opacity: 0 }}
@@ -69,7 +82,7 @@ export default function Navbar() {
           onClick={(e) => { e.preventDefault(); handleNavClick("#home"); }}
         >
           <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm text-white transition-all duration-300 group-hover:shadow-lg"
+            className="w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm text-white transition-all duration-300"
             style={{
               background: "linear-gradient(135deg,#ed722a,#c45f1f)",
               boxShadow: "0 0 16px rgba(237,114,42,0.3)",
@@ -77,7 +90,10 @@ export default function Navbar() {
           >
             RK
           </div>
-          <span className="hidden sm:block text-sm font-bold text-white/80 group-hover:text-white transition-colors duration-200">
+          <span
+            className="hidden sm:block text-sm font-bold transition-colors duration-200"
+            style={{ color: logoText }}
+          >
             Rohan Keshri
           </span>
         </a>
@@ -90,7 +106,16 @@ export default function Navbar() {
               href={link.href}
               id={`nav-${link.label.toLowerCase()}`}
               onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
-              className="px-3 py-1.5 rounded-lg text-sm font-medium text-white/50 hover:text-white hover:bg-white/5 transition-all duration-200"
+              className="px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
+              style={{ color: navText }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = navHoverBg;
+                (e.currentTarget as HTMLAnchorElement).style.color = isDark ? "#fff" : "#000";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
+                (e.currentTarget as HTMLAnchorElement).style.color = navText;
+              }}
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 + i * 0.06, duration: 0.4 }}
@@ -107,12 +132,12 @@ export default function Navbar() {
             href="#contact"
             id="nav-hire-btn"
             onClick={(e) => { e.preventDefault(); handleNavClick("#contact"); }}
-            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white transition-all duration-200 hover:shadow-lg"
+            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white transition-all duration-200"
             style={{
               background: "linear-gradient(135deg,#ed722a,#c45f1f)",
-              boxShadow: "0 0 16px rgba(237,114,42,0.2)",
+              boxShadow: "0 0 16px rgba(237,114,42,0.25)",
             }}
-            whileHover={{ scale: 1.04, boxShadow: "0 0 24px rgba(237,114,42,0.4)" }}
+            whileHover={{ scale: 1.04, boxShadow: "0 0 24px rgba(237,114,42,0.45)" }}
             whileTap={{ scale: 0.96 }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -127,8 +152,12 @@ export default function Navbar() {
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav"
             id="nav-mobile-toggle"
-            className="md:hidden w-9 h-9 rounded-xl flex items-center justify-center border border-white/10 text-white/60 hover:text-white hover:border-white/25 transition-all duration-200"
-            style={{ background: "rgba(255,255,255,0.04)" }}
+            className="md:hidden w-9 h-9 rounded-xl flex items-center justify-center border transition-all duration-200"
+            style={{
+              border: `1px solid ${hamBorder}`,
+              background: hamBg,
+              color: hamText,
+            }}
             onClick={() => setMobileOpen((o) => !o)}
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -166,15 +195,21 @@ export default function Navbar() {
           >
             {/* Backdrop */}
             <div
-              className="absolute inset-0 bg-black/70"
-              style={{ backdropFilter: "blur(8px)" }}
+              className="absolute inset-0"
+              style={{
+                background: isDark ? "rgba(0,0,0,0.72)" : "rgba(0,0,0,0.35)",
+                backdropFilter: "blur(8px)",
+              }}
               onClick={() => setMobileOpen(false)}
             />
 
             {/* Panel */}
             <motion.div
-              className="absolute top-0 right-0 bottom-0 w-72 border-l border-white/5 flex flex-col pt-20 pb-8 px-6"
-              style={{ background: "rgba(5,5,5,0.98)" }}
+              className="absolute top-0 right-0 bottom-0 w-72 flex flex-col pt-20 pb-8 px-6"
+              style={{
+                background: isDark ? "rgba(5,5,5,0.98)" : "rgba(252,252,252,0.98)",
+                borderLeft: `1px solid ${isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.08)"}`,
+              }}
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -186,12 +221,23 @@ export default function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold text-white/60 hover:text-white hover:bg-white/5 transition-all duration-200"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold transition-all duration-200"
+                    style={{
+                      color: isDark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)",
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLAnchorElement).style.background = navHoverBg;
+                      (e.currentTarget as HTMLAnchorElement).style.color = isDark ? "#fff" : "#000";
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
+                      (e.currentTarget as HTMLAnchorElement).style.color = isDark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)";
+                    }}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.06, duration: 0.3 }}
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#ed722a]" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#ed722a] flex-shrink-0" />
                     {link.label}
                   </motion.a>
                 ))}
