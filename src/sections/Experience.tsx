@@ -198,8 +198,8 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
       <motion.div
         className="group flex-1 mb-10 rounded-2xl border overflow-hidden relative"
         style={{
-          background: "linear-gradient(135deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.01) 100%)",
-          borderColor: "rgba(255,255,255,0.06)",
+          background: "var(--color-surface)",
+          borderColor: "var(--color-border)",
         }}
         whileHover={{ y: -3, transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] } }}
       >
@@ -240,9 +240,9 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
                 >
                   {entry.type}
                 </span>
-                <span className="text-[10px] text-white/30 font-medium">{entry.duration}</span>
+                <span className="text-[10px] font-medium" style={{ color: "var(--color-foreground-subtle)" }}>{entry.duration}</span>
               </div>
-              <h3 className="text-lg font-bold text-white leading-tight group-hover:text-white transition-colors">
+              <h3 className="text-lg font-bold leading-tight group-hover:text-white transition-colors" style={{ color: "var(--color-foreground)" }}>
                 {entry.role}
               </h3>
               <div className="flex items-center gap-1.5 mt-1">
@@ -253,16 +253,16 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
               </div>
             </div>
             <div className="flex flex-col items-start sm:items-end gap-1.5 flex-shrink-0">
-              <span className="inline-flex items-center gap-1.5 text-xs text-white/40 font-medium">
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium" style={{ color: "var(--color-foreground-muted)" }}>
                 <Calendar size={11} /> {entry.period}
               </span>
-              <span className="inline-flex items-center gap-1.5 text-xs text-white/30">
+              <span className="inline-flex items-center gap-1.5 text-xs" style={{ color: "var(--color-foreground-subtle)" }}>
                 <MapPin size={11} /> {entry.location}
               </span>
             </div>
           </div>
 
-          <p className="text-sm text-white/50 leading-relaxed mb-5">{entry.description}</p>
+          <p className="text-sm leading-relaxed mb-5" style={{ color: "var(--color-foreground-muted)" }}>{entry.description}</p>
 
           {/* Achievements */}
           <div className="space-y-2.5 mb-5">
@@ -282,22 +282,22 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
                   >
                     <Icon size={10} style={{ color: entry.accentColor }} strokeWidth={2.5} />
                   </div>
-                  <span className="text-xs text-white/55 leading-relaxed">{ach.text}</span>
+                  <span className="text-xs leading-relaxed" style={{ color: "var(--color-foreground-muted)" }}>{ach.text}</span>
                 </motion.div>
               );
             })}
           </div>
 
           {/* Tech stack */}
-          <div className="flex flex-wrap gap-1.5 pt-4 border-t border-white/5">
+          <div className="flex flex-wrap gap-1.5 pt-4" style={{ borderTop: "1px solid var(--color-border)" }}>
             {entry.tech.map((t) => (
               <span
                 key={t}
-                className="text-[10px] font-semibold px-2.5 py-1 rounded-full transition-colors duration-200 hover:border-white/20"
+                className="text-[10px] font-semibold px-2.5 py-1 rounded-full"
                 style={{
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  color: "rgba(255,255,255,0.5)",
+                  background: "var(--color-surface-3)",
+                  border: "1px solid var(--color-border)",
+                  color: "var(--color-foreground-muted)",
                 }}
               >
                 {t}
@@ -362,17 +362,17 @@ function SummaryStrip() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="grid grid-cols-2 sm:grid-cols-4 gap-px mt-4 mb-16 overflow-hidden rounded-2xl border border-white/5"
-      style={{ background: "rgba(255,255,255,0.04)" }}
+      className="grid grid-cols-2 sm:grid-cols-4 gap-px mt-4 mb-16 overflow-hidden rounded-2xl border"
+      style={{ background: "var(--color-border)", borderColor: "var(--color-border)" }}
     >
       {items.map((item, i) => (
         <div
           key={i}
           className="flex flex-col items-center justify-center py-5 px-4 text-center"
-          style={{ background: "rgba(0,0,0,0.6)" }}
+          style={{ background: "var(--color-surface)" }}
         >
-          <span className="text-2xl font-black text-white">{item.value}</span>
-          <span className="text-[10px] font-semibold tracking-widest uppercase text-white/30 mt-1">
+          <span className="text-2xl font-black" style={{ color: "var(--color-foreground)" }}>{item.value}</span>
+          <span className="text-[10px] font-semibold tracking-widest uppercase mt-1" style={{ color: "var(--color-foreground-subtle)" }}>
             {item.label}
           </span>
         </div>

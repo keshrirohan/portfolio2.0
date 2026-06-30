@@ -94,6 +94,63 @@
   border-color: var(--color-border);
 }
 
+/* ─── Light theme — fix inline white opacity patterns ─────────────────── */
+/* These selectors patch components that still use hardcoded Tailwind opacity
+   utilities (text-white/50 etc.) and inline rgba(255,255,255,...) values.   */
+
+/* Section / card background surfaces */
+[data-theme="light"] [style*="rgba(255,255,255,0.02)"],
+[data-theme="light"] [style*="rgba(255,255,255,0.025)"],
+[data-theme="light"] [style*="rgba(255,255,255,0.03)"],
+[data-theme="light"] [style*="rgba(255,255,255,0.04)"] {
+  background: rgba(0, 0, 0, 0.03) !important;
+}
+
+[data-theme="light"] [style*="rgba(255,255,255,0.05)"],
+[data-theme="light"] [style*="rgba(255,255,255,0.06)"],
+[data-theme="light"] [style*="rgba(255,255,255,0.07)"],
+[data-theme="light"] [style*="rgba(255,255,255,0.08)"] {
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Borders that use inline white rgba */
+[data-theme="light"] [style*="borderColor: \"rgba(255,255,255"] {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Common Tailwind white-opacity text classes — remap to dark in light mode */
+[data-theme="light"] .text-white    { color: var(--color-foreground)        !important; }
+[data-theme="light"] .text-white\/80 { color: rgba(0,0,0,0.80)             !important; }
+[data-theme="light"] .text-white\/70 { color: rgba(0,0,0,0.70)             !important; }
+[data-theme="light"] .text-white\/60 { color: rgba(0,0,0,0.60)             !important; }
+[data-theme="light"] .text-white\/55 { color: rgba(0,0,0,0.55)             !important; }
+[data-theme="light"] .text-white\/50 { color: rgba(0,0,0,0.50)             !important; }
+[data-theme="light"] .text-white\/45 { color: rgba(0,0,0,0.45)             !important; }
+[data-theme="light"] .text-white\/40 { color: rgba(0,0,0,0.40)             !important; }
+[data-theme="light"] .text-white\/35 { color: rgba(0,0,0,0.35)             !important; }
+[data-theme="light"] .text-white\/30 { color: rgba(0,0,0,0.30)             !important; }
+[data-theme="light"] .text-white\/25 { color: rgba(0,0,0,0.25)             !important; }
+[data-theme="light"] .text-white\/20 { color: rgba(0,0,0,0.20)             !important; }
+
+/* White/black opacity backgrounds in light mode */
+[data-theme="light"] .bg-white\/5  { background-color: rgba(0,0,0,0.04)  !important; }
+[data-theme="light"] .bg-white\/8  { background-color: rgba(0,0,0,0.06)  !important; }
+[data-theme="light"] .bg-white\/10 { background-color: rgba(0,0,0,0.07)  !important; }
+[data-theme="light"] .bg-white\/15 { background-color: rgba(0,0,0,0.10)  !important; }
+
+/* White opacity borders */
+[data-theme="light"] .border-white\/5  { border-color: rgba(0,0,0,0.06)  !important; }
+[data-theme="light"] .border-white\/8  { border-color: rgba(0,0,0,0.08)  !important; }
+[data-theme="light"] .border-white\/10 { border-color: rgba(0,0,0,0.10)  !important; }
+[data-theme="light"] .border-white\/15 { border-color: rgba(0,0,0,0.12)  !important; }
+[data-theme="light"] .border-white\/20 { border-color: rgba(0,0,0,0.15)  !important; }
+[data-theme="light"] .border-white\/25 { border-color: rgba(0,0,0,0.18)  !important; }
+
+/* Hover states */
+[data-theme="light"] .hover\:text-white:hover  { color: #000000 !important; }
+[data-theme="light"] .hover\:bg-white\/5:hover { background-color: rgba(0,0,0,0.04) !important; }
+
+
 /* ─── Base Reset ──────────────────────────────────────────────────────── */
 *,
 *::before,
