@@ -523,9 +523,10 @@ export default function Contact() {
             initial={{ opacity: 0, x: -30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="relative p-6 sm:p-8 rounded-3xl border border-white/5 overflow-hidden"
+            className="relative p-6 sm:p-8 rounded-3xl border overflow-hidden"
             style={{
-              background: "linear-gradient(135deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.01) 100%)",
+              background: "var(--color-surface)",
+              borderColor: "var(--color-border)",
             }}
           >
             {/* Corner glow */}
@@ -548,8 +549,8 @@ export default function Contact() {
                   <Send size={15} className="text-[#ed722a]" strokeWidth={2} />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white">Send a Message</h3>
-                  <p className="text-xs text-white/35">I read every message personally.</p>
+                  <h3 className="text-base font-bold" style={{ color: "var(--color-foreground)" }}>Send a Message</h3>
+                  <p className="text-xs" style={{ color: "var(--color-foreground-subtle)" }}>I read every message personally.</p>
                 </div>
               </div>
               <ContactForm />
