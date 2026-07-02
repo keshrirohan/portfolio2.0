@@ -351,13 +351,13 @@ export default function Hero() {
   useEffect(() => setMounted(true), []);
 
   /* Entrance animation variants */
-  const itemTransition: Transition = { duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] };
+  const itemTransition: Transition = { duration: 0.3, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] };
   const container = {
     hidden: {},
-    show: { transition: { staggerChildren: 0.12, delayChildren: 0.3 } },
+    show: { transition: { staggerChildren: 0.08, delayChildren: 0.2 } },
   };
   const item = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 16 },
     show: { opacity: 1, y: 0, transition: itemTransition },
   };
 
@@ -365,8 +365,8 @@ export default function Hero() {
     <section
       id="home"
       aria-label="Hero section"
-      className="relative w-full min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center overflow-hidden"
-      style={{ background: "var(--color-background)" }}
+      className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden"
+      style={{ background: "var(--color-bg)" }}
     >
       {/* Particle background — client only to avoid SSR issues */}
       {mounted && <ParticlesBg />}
@@ -381,19 +381,19 @@ export default function Hero() {
 
       {/* ── Main Content ── */}
       <motion.div
-        className="relative z-10 flex flex-col items-center text-center px-4 sm:px-6 max-w-4xl mx-auto w-full py-10 sm:py-16"
+        className="relative z-10 flex flex-col items-center text-center px-5 sm:px-6 max-w-3xl mx-auto w-full py-16 sm:py-20"
         variants={container}
         initial="hidden"
         animate="show"
       >
         {/* Available badge */}
         <motion.div variants={item}>
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#ed722a]/20 bg-[#ed722a]/8 mb-8">
-            <span className="relative flex h-2 w-2">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#ed722a]/20 bg-[#ed722a]/8 mb-6">
+            <span className="relative flex h-1.5 w-1.5" aria-hidden="true">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ed722a] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ed722a]" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#ed722a]" />
             </span>
-            <span className="text-xs font-semibold tracking-[0.15em] uppercase text-[#ed722a]">
+            <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#ed722a]">
               Available for opportunities
             </span>
           </div>
@@ -402,9 +402,10 @@ export default function Hero() {
         {/* Name */}
         <motion.h1
           variants={item}
-          className="text-4xl sm:text-6xl lg:text-8xl font-black tracking-tight leading-none mb-3 sm:mb-4"
+          className="text-[2.75rem] sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] mb-3"
+          style={{ color: "var(--color-fg)" }}
         >
-          <span className="block text-white">Rohan</span>
+          <span className="block">Rohan</span>
           <span
             className="block"
             style={{
@@ -413,7 +414,7 @@ export default function Hero() {
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
-              animation: "shimmer 3s linear infinite",
+              animation: "shimmer 4s linear infinite",
             }}
           >
             Keshri
@@ -423,13 +424,14 @@ export default function Hero() {
         {/* Typing subtitle */}
         <motion.div
           variants={item}
-          className="h-10 sm:h-12 flex items-center justify-center mb-6"
+          className="h-9 sm:h-11 flex items-center justify-center mb-5"
           aria-label="Animated job title"
+          aria-live="polite"
         >
-          <span className="text-lg sm:text-2xl font-semibold text-white/60 font-mono tracking-wide">
+          <span className="text-base sm:text-xl font-medium font-mono tracking-wide" style={{ color: "var(--color-fg-muted)" }}>
             {`< `}
-            <span className="text-[#ed722a]">{typedTitle}</span>
-            <span className="inline-block w-0.5 h-5 sm:h-6 ml-0.5 bg-[#ed722a] align-middle animate-pulse" />
+            <span className="text-[#ed722a] font-semibold">{typedTitle}</span>
+            <span className="inline-block w-0.5 h-4 sm:h-5 ml-0.5 bg-[#ed722a] align-middle animate-pulse" aria-hidden="true" />
             {` />`}
           </span>
         </motion.div>
@@ -437,7 +439,8 @@ export default function Hero() {
         {/* Bio */}
         <motion.p
           variants={item}
-          className="text-sm sm:text-base md:text-lg text-white/50 max-w-xl leading-relaxed mb-8 sm:mb-10 px-2 sm:px-0"
+          className="text-sm sm:text-base max-w-[48ch] leading-[1.8] mb-8 px-0"
+          style={{ color: "var(--color-fg-muted)" }}
         >
           Crafting{" "}
           <span className="text-white/80 font-medium">scalable, performant</span> web experiences
@@ -501,9 +504,9 @@ export default function Hero() {
       {/* Bottom gradient fade */}
       <div
         aria-hidden="true"
-        className="absolute bottom-0 left-0 right-0 h-24 sm:h-32 pointer-events-none"
+        className="absolute bottom-0 left-0 right-0 h-28 pointer-events-none"
         style={{
-          background: "linear-gradient(to top, var(--color-background) 0%, transparent 100%)",
+          background: "linear-gradient(to top, var(--color-bg) 0%, transparent 100%)",
         }}
       />
     </section>

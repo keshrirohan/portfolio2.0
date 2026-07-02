@@ -183,8 +183,8 @@ export default function RootLayout({
       <body
         className="antialiased min-h-screen overflow-x-hidden"
         style={{
-          backgroundColor: "var(--color-background)",
-          color: "var(--color-foreground)",
+          backgroundColor: "var(--color-bg)",
+          color: "var(--color-fg)",
         }}
       >
         <ThemeProvider>
@@ -199,11 +199,11 @@ export default function RootLayout({
           <ScrollProgressBar />
           <Navbar />
 
-          {/* Page content — pt-16 offsets the fixed 56-72px navbar */}
+          {/* Page content — pt-16 offsets the 54-68px fixed navbar */}
           <main
             id="main-content"
             tabIndex={-1}
-            className="outline-none pt-16"
+            className="outline-none pt-[68px]"
           >
             {children}
           </main>
