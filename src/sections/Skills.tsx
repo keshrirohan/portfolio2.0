@@ -94,58 +94,38 @@ function SkillBar({ skill, index, accent }: { skill: Skill; index: number; accen
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, x: -16 }}
+      initial={{ opacity: 0, x: -12 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ delay: index * 0.07 + 0.15, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ delay: index * 0.05, duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
       className="group"
     >
       {/* Label row */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <span
-            className="w-2 h-2 rounded-full flex-shrink-0 transition-transform duration-300 group-hover:scale-125"
-            style={{ backgroundColor: skill.color, boxShadow: `0 0 6px ${skill.color}80` }}
+            className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+            style={{ backgroundColor: skill.color }}
           />
-          <span className="text-sm font-semibold text-white/80 group-hover:text-white transition-colors duration-200">
+          <span className="text-sm font-semibold transition-colors duration-200" style={{ color: "var(--color-fg)" }}>
             {skill.name}
           </span>
         </div>
-        <motion.span
-          className="text-xs font-bold tabular-nums"
-          style={{ color: accent }}
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: index * 0.07 + 0.4 }}
-        >
+        <span className="text-xs font-bold tabular-nums" style={{ color: accent }}>
           {skill.level}%
-        </motion.span>
+        </span>
       </div>
 
       {/* Track */}
       <div
         className="relative h-1.5 rounded-full overflow-hidden"
-        style={{ background: "rgba(255,255,255,0.06)" }}
+        style={{ background: "var(--color-border)" }}
       >
-        {/* Fill */}
         <motion.div
           className="absolute inset-y-0 left-0 rounded-full"
-          style={{
-            background: `linear-gradient(90deg, ${skill.color}cc, ${skill.color})`,
-            boxShadow: `0 0 8px ${skill.color}60`,
-          }}
+          style={{ background: `linear-gradient(90deg, ${skill.color}bb, ${skill.color})` }}
           initial={{ width: 0 }}
           animate={inView ? { width: `${skill.level}%` } : {}}
-          transition={{ delay: index * 0.07 + 0.2, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        />
-        {/* Shimmer effect */}
-        <motion.div
-          className="absolute inset-y-0 w-8 rounded-full"
-          style={{
-            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
-          }}
-          initial={{ left: "-2rem" }}
-          animate={inView ? { left: `${skill.level}%` } : {}}
-          transition={{ delay: index * 0.07 + 1.1, duration: 0.5, ease: "easeOut" }}
+          transition={{ delay: index * 0.05 + 0.1, duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
         />
       </div>
     </motion.div>
@@ -256,45 +236,29 @@ function CategoryPanel({ cat }: { cat: SkillCategory }) {
   return (
     <motion.div
       key={cat.id}
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -12 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="relative p-6 sm:p-8 rounded-2xl border overflow-hidden h-full"
-      style={{
-        border: `1px solid ${cat.accent}15`,
-        background: `linear-gradient(135deg, rgba(255,255,255,0.025) 0%, ${cat.accent}05 100%)`,
-        backdropFilter: "blur(8px)",
-      }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+      className="card h-full"
+      style={{ background: "var(--color-surface)", borderColor: `${cat.accent}20` }}
     >
-      {/* Corner glow */}
-      <div
-        className="absolute top-0 right-0 w-48 h-48 pointer-events-none"
-        style={{
-          background: `radial-gradient(circle at top right, ${cat.accent}12, transparent 70%)`,
-        }}
-      />
-
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{
-            background: `${cat.accent}18`,
-            border: `1px solid ${cat.accent}30`,
-            boxShadow: `0 0 16px ${cat.accent}15`,
-          }}
+          className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+          style={{ background: `${cat.accent}14`, border: `1px solid ${cat.accent}25` }}
         >
-          <Icon size={18} style={{ color: cat.accent }} strokeWidth={1.8} />
+          <Icon size={17} style={{ color: cat.accent }} strokeWidth={1.8} />
         </div>
         <div>
-          <h3 className="text-base font-bold text-white">{cat.label}</h3>
-          <p className="text-xs text-white/40 font-medium">{cat.description}</p>
+          <h3 className="text-sm font-bold" style={{ color: "var(--color-fg)" }}>{cat.label}</h3>
+          <p className="text-xs" style={{ color: "var(--color-fg-muted)" }}>{cat.description}</p>
         </div>
       </div>
 
       {/* Progress bars */}
-      <div className="space-y-5">
+      <div className="space-y-4">
         {cat.skills.map((skill, i) => (
           <SkillBar key={skill.name} skill={skill} index={i} accent={cat.accent} />
         ))}
@@ -313,23 +277,21 @@ function AllSkillsMosaic() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="mt-20"
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+      className="mt-14"
     >
-      <div className="flex items-center gap-3 mb-8">
-        <div className="h-px flex-1"
-          style={{ background: "linear-gradient(90deg,rgba(237,114,42,0.4),transparent)" }} />
-        <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] uppercase text-[#ed722a]">
-          <Layers size={13} /> Full Tech Arsenal
+      <div className="flex items-center gap-3 mb-6">
+        <div className="h-px flex-1" style={{ background: `linear-gradient(90deg,var(--color-accent),transparent)` }} />
+        <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.1em] uppercase" style={{ color: "var(--color-accent)" }}>
+          <Layers size={12} /> Full Tech Arsenal
         </span>
-        <div className="h-px flex-1"
-          style={{ background: "linear-gradient(90deg,transparent,rgba(237,114,42,0.4))" }} />
+        <div className="h-px flex-1" style={{ background: `linear-gradient(90deg,transparent,var(--color-accent))` }} />
       </div>
 
-      <div className="flex flex-wrap gap-2.5 justify-center">
+      <div className="flex flex-wrap gap-2 justify-center">
         {allSkills.map((s, i) => (
           <SkillPill key={s.name} name={s.name} color={s.color} index={i} />
         ))}
@@ -344,30 +306,16 @@ function AllSkillsMosaic() {
 function SectionHeader() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="text-center mb-16"
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+      className="section-header"
     >
-      <span className="section-tag">⚡ Technical Skills</span>
-      <h2 className="section-title mt-4">
-        My{" "}
-        <span
-          style={{
-            background: "linear-gradient(135deg,#ed722a,#f59150)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}
-        >
-          Tech Stack
-        </span>
-      </h2>
-      <p className="section-subtitle mx-auto mt-4">
-        Tools and technologies I use to bring ideas to life — from pixel to production.
-      </p>
-      <div className="divider mx-auto mt-6" />
+      <span className="section-tag">Technical Skills</span>
+      <h2 className="section-title">My <span className="gradient-text">Tech Stack</span></h2>
+      <p className="section-subtitle mx-auto mt-3">Tools and technologies I use to bring ideas to life — from pixel to production.</p>
+      <div className="divider mx-auto" />
     </motion.div>
   );
 }
@@ -380,82 +328,54 @@ export default function Skills() {
   const activeCategory = CATEGORIES.find((c) => c.id === activeId) ?? CATEGORIES[0];
 
   return (
-    <section id="skills" aria-label="Skills section" className="relative overflow-hidden" style={{ background: "var(--color-background)" }}>
-      {/* Top gradient border */}
-      <div className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(237,114,42,0.3),transparent)" }} />
-
-      {/* Background glow */}
-      <div className="absolute top-1/3 left-0 w-[500px] h-[500px] pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(237,114,42,0.05) 0%, transparent 70%)",
-          filter: "blur(80px)",
-        }} />
+    <section id="skills" aria-label="Skills section" className="relative overflow-hidden section-alt">
+      <div className="section-sep absolute top-0 left-0" aria-hidden="true" />
 
       <div className="container section">
         <SectionHeader />
 
         {/* Main interactive layout */}
-        <div className="grid lg:grid-cols-[200px_1fr] gap-6 items-start">
-          {/* ── Tabs — horizontal scroll on mobile, vertical sidebar on lg ── */}
+        <div className="grid lg:grid-cols-[190px_1fr] gap-5 items-start">
+          {/* ── Tabs ── */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -16 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
             className="flex lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0 lg:overflow-x-visible snap-x snap-mandatory"
             style={{ scrollbarWidth: "none" }}
           >
             {CATEGORIES.map((cat) => (
-              <div key={cat.id} className="snap-start">
-                <CategoryTab
-                  cat={cat}
-                  active={activeId === cat.id}
-                  onClick={() => setActiveId(cat.id)}
-                />
+              <div key={cat.id} className="snap-start flex-shrink-0">
+                <CategoryTab cat={cat} active={activeId === cat.id} onClick={() => setActiveId(cat.id)} />
               </div>
             ))}
 
-            {/* Overall proficiency summary card */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-              className="hidden lg:block mt-4 p-4 rounded-xl border text-center flex-shrink-0"
-              style={{
-                background: "rgba(128,128,128,0.04)",
-                border: "1px solid rgba(128,128,128,0.1)",
-              }}
+            {/* Summary card — desktop only */}
+            <div
+              className="hidden lg:block mt-3 p-4 rounded-xl border text-center"
+              style={{ background: "var(--color-surface-2)", borderColor: "var(--color-border)" }}
             >
-              <p className="text-xs font-medium uppercase tracking-widest mb-3" style={{ color: "var(--color-foreground-subtle)" }}>
-                Overall
+              <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: "var(--color-fg-subtle)" }}>Overall</p>
+              <p className="text-2xl font-black" style={{ color: "var(--color-fg)" }}>
+                <span style={{ color: "var(--color-accent)" }}>17</span>
               </p>
-              <p className="text-3xl font-black" style={{ color: "var(--color-foreground)" }}>
-                <span style={{ color: "#ed722a" }}>17</span>
-              </p>
-              <p className="text-xs mt-1" style={{ color: "var(--color-foreground-subtle)" }}>Technologies</p>
-              <div className="w-full h-1 rounded-full mt-3 overflow-hidden"
-                style={{ background: "rgba(128,128,128,0.15)" }}>
-                <motion.div
-                  className="h-full rounded-full"
-                  style={{ background: "linear-gradient(90deg,#ed722a,#f59150)" }}
-                  initial={{ width: 0 }}
-                  whileInView={{ width: "82%" }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.6, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                />
+              <p className="text-[10px] mt-0.5" style={{ color: "var(--color-fg-subtle)" }}>Technologies</p>
+              <div className="w-full h-1 rounded-full mt-3 overflow-hidden" style={{ background: "var(--color-border)" }}>
+                <motion.div className="h-full rounded-full" style={{ background: "linear-gradient(90deg,#ed722a,#f59150)" }}
+                  initial={{ width: 0 }} whileInView={{ width: "82%" }} viewport={{ once: true }}
+                  transition={{ delay: 0.3, duration: 0.8, ease: [0.4, 0, 0.2, 1] }} />
               </div>
-              <p className="text-xs text-[#ed722a] font-bold mt-1.5">82% avg</p>
-            </motion.div>
+              <p className="text-xs font-bold mt-1" style={{ color: "var(--color-accent)" }}>82% avg</p>
+            </div>
           </motion.div>
 
           {/* ── Detail panel ── */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 16 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.3, delay: 0.06, ease: [0.4, 0, 0.2, 1] }}
           >
             <AnimatePresence mode="wait">
               <CategoryPanel key={activeCategory.id} cat={activeCategory} />
@@ -463,7 +383,6 @@ export default function Skills() {
           </motion.div>
         </div>
 
-        {/* All skills mosaic */}
         <AllSkillsMosaic />
       </div>
     </section>
