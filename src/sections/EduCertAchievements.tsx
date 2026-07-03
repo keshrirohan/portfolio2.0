@@ -42,22 +42,16 @@ function SectionHeader({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="text-center mb-16"
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+      className="section-header"
     >
-      <span className="section-tag">
-        {tagIcon}
-        {tag}
-      </span>
-      <h2 className="section-title mt-4">
-        {title}{" "}
-        <span style={gradientText}>{highlight}</span>
-      </h2>
-      <p className="section-subtitle mx-auto mt-4">{subtitle}</p>
-      <div className="divider mx-auto mt-6" />
+      <span className="section-tag">{tagIcon} {tag}</span>
+      <h2 className="section-title">{title} <span className="gradient-text">{highlight}</span></h2>
+      <p className="section-subtitle mx-auto mt-3">{subtitle}</p>
+      <div className="divider mx-auto" />
     </motion.div>
   );
 }
@@ -118,16 +112,11 @@ function EducationCard({ entry, index }: { entry: EducationEntry; index: number 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
-      className="group relative rounded-2xl border overflow-hidden flex flex-col"
-      style={{
-        background:
-          "linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)",
-        borderColor: "rgba(255,255,255,0.07)",
-      }}
-      whileHover={{ y: -4, transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] } }}
+      transition={{ duration: 0.3, delay: index * 0.08, ease: [0.4, 0, 0.2, 1] }}
+      className="card group relative flex flex-col overflow-hidden"
+      whileHover={{ y: -3, transition: { duration: 0.2 } }}
     >
       {/* Top accent stripe */}
       <motion.div
@@ -193,7 +182,7 @@ function EducationCard({ entry, index }: { entry: EducationEntry; index: number 
         </div>
 
         {/* Degree & Institution */}
-        <h3 className="text-base font-bold text-white leading-tight mb-1.5">
+        <h3 className="text-base font-bold leading-tight mb-1.5" style={{ color: "var(--color-fg)" }}>
           {entry.degree}
         </h3>
         <p className="text-sm font-semibold mb-4" style={{ color: entry.accentColor }}>
@@ -202,22 +191,17 @@ function EducationCard({ entry, index }: { entry: EducationEntry; index: number 
 
         {/* Meta */}
         <div className="flex flex-wrap gap-3 mb-5">
-          <span className="inline-flex items-center gap-1.5 text-xs text-white/40 font-medium">
+          <span className="inline-flex items-center gap-1.5 text-xs font-medium" style={{ color: "var(--color-fg-muted)" }}>
             <Calendar size={11} />
             {entry.period}
           </span>
-          <span className="inline-flex items-center gap-1.5 text-xs text-white/40 font-medium">
+          <span className="inline-flex items-center gap-1.5 text-xs font-medium" style={{ color: "var(--color-fg-muted)" }}>
             <MapPin size={11} />
             {entry.location}
           </span>
           {entry.board && (
             <span
-              className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full"
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(255,255,255,0.1)",
-                color: "rgba(255,255,255,0.5)",
-              }}
+              className="badge badge-neutral text-[10px] tracking-widest uppercase"
             >
               {entry.board}
             </span>
@@ -240,7 +224,7 @@ function EducationCard({ entry, index }: { entry: EducationEntry; index: number 
                   className="flex-shrink-0 mt-0.5"
                   style={{ color: entry.accentColor }}
                 />
-                <span className="text-xs text-white/50 leading-relaxed">{h}</span>
+                <span className="text-xs leading-relaxed" style={{ color: "var(--color-fg-muted)" }}>{h}</span>
               </motion.div>
             ))}
           </div>
@@ -256,7 +240,7 @@ export function Education() {
       id="education"
       aria-label="Education section"
       className="relative overflow-hidden"
-      style={{ background: "var(--color-background)" }}
+      style={{ background: "var(--color-bg)" }}
     >
       {/* Top separator */}
       <div
@@ -364,17 +348,12 @@ function CertCard({ cert, index }: { cert: CertEntry; index: number }) {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-      className="group relative rounded-2xl border overflow-hidden flex-shrink-0"
-      style={{
-        background:
-          "linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)",
-        borderColor: "rgba(255,255,255,0.07)",
-        width: "260px",
-      }}
-      whileHover={{ y: -4, transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] } }}
+      transition={{ duration: 0.3, delay: index * 0.06, ease: [0.4, 0, 0.2, 1] }}
+      className="card group relative overflow-hidden flex-shrink-0"
+      style={{ width: "260px" }}
+      whileHover={{ y: -3, transition: { duration: 0.2 } }}
     >
       {/* Accent top stripe */}
       <motion.div
@@ -415,7 +394,7 @@ function CertCard({ cert, index }: { cert: CertEntry; index: number }) {
         </div>
 
         {/* Title */}
-        <h3 className="text-sm font-bold text-white leading-tight mb-2 line-clamp-2">
+        <h3 className="text-sm font-bold leading-tight mb-2 line-clamp-2" style={{ color: "var(--color-fg)" }}>
           {cert.title}
         </h3>
 
@@ -423,7 +402,7 @@ function CertCard({ cert, index }: { cert: CertEntry; index: number }) {
         <p className="text-xs font-medium mb-1" style={{ color: cert.accentColor }}>
           {cert.issuer}
         </p>
-        <p className="text-[11px] text-white/35 mb-4">{cert.platform}</p>
+        <p className="text-[11px] mb-4" style={{ color: "var(--color-fg-muted)" }}>{cert.platform}</p>
 
         {/* Year pill */}
         <div className="flex items-center justify-between pt-3 border-t border-white/5">
@@ -439,7 +418,7 @@ function CertCard({ cert, index }: { cert: CertEntry; index: number }) {
           </span>
           <ExternalLink
             size={12}
-            className="text-white/20 group-hover:text-white/50 transition-colors duration-200"
+            style={{ color: "var(--color-fg-subtle)" }}
           />
         </div>
       </div>
@@ -456,7 +435,7 @@ export function Certifications() {
       id="certifications"
       aria-label="Certifications section"
       className="relative overflow-hidden"
-      style={{ background: "var(--color-background)" }}
+      style={{ background: "var(--color-bg)" }}
     >
       {/* Top separator */}
       <div
@@ -524,7 +503,7 @@ export function Certifications() {
                 style={{
                   width: i === 0 ? "20px" : "6px",
                   height: "6px",
-                  background: i === 0 ? ORANGE : "rgba(255,255,255,0.15)",
+                  background: i === 0 ? ORANGE : "var(--color-border)",
                 }}
               />
             ))}
@@ -534,7 +513,7 @@ export function Certifications() {
         {/* Stats strip */}
         <motion.div
           className="grid grid-cols-3 gap-px mt-10 rounded-2xl overflow-hidden border border-white/5"
-          style={{ background: "rgba(255,255,255,0.03)" }}
+          style={{ background: "var(--color-surface)" }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
@@ -550,8 +529,8 @@ export function Certifications() {
               className="flex flex-col items-center justify-center py-5 px-4 text-center"
               style={{ background: "rgba(0,0,0,0.6)" }}
             >
-              <span className="text-2xl font-black text-white">{item.value}</span>
-              <span className="text-[10px] font-semibold tracking-widest uppercase text-white/30 mt-1">
+              <span className="text-2xl font-black" style={{ color: "var(--color-fg)" }}>{item.value}</span>
+              <span className="text-[10px] font-semibold tracking-widest uppercase mt-1" style={{ color: "var(--color-fg-subtle)" }}>
                 {item.label}
               </span>
             </div>
@@ -625,13 +604,8 @@ function AchievementCard({
         delay: index * 0.15,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="group relative rounded-2xl border overflow-hidden flex flex-col"
-      style={{
-        background:
-          "linear-gradient(135deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.01) 100%)",
-        borderColor: "rgba(255,255,255,0.07)",
-      }}
-      whileHover={{ y: -6, transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] } }}
+      className="card group relative flex flex-col overflow-hidden min-h-[180px]"
+      whileHover={{ y: -3, transition: { duration: 0.2 } }}
     >
       {/* Corner glow */}
       <div
@@ -686,12 +660,12 @@ function AchievementCard({
         </motion.div>
 
         {/* Title */}
-        <h3 className="text-lg font-bold text-white leading-tight mb-3">
+        <h3 className="text-lg font-bold leading-tight mb-3" style={{ color: "var(--color-fg)" }}>
           {entry.title}
         </h3>
 
         {/* Description */}
-        <p className="text-sm text-white/50 leading-relaxed flex-1">
+        <p className="text-sm leading-relaxed flex-1" style={{ color: "var(--color-fg-muted)" }}>
           {entry.description}
         </p>
 
@@ -733,7 +707,7 @@ export function Achievements() {
       id="achievements"
       aria-label="Achievements section"
       className="relative overflow-hidden"
-      style={{ background: "var(--color-background)" }}
+      style={{ background: "var(--color-bg)" }}
     >
       {/* Top separator */}
       <div
