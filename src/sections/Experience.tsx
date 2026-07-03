@@ -1,15 +1,12 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import {
   Briefcase,
   Calendar,
   MapPin,
   ExternalLink,
-  ChevronRight,
   Sparkles,
   TrendingUp,
   Users,
@@ -17,10 +14,6 @@ import {
   Zap,
   Star,
 } from "lucide-react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 /* ─────────────────────────────────────────────────────
    Types
@@ -109,56 +102,23 @@ const EXPERIENCES: ExperienceEntry[] = [
   },
 ];
 
-/* ─────────────────────────────────────────────────────
-   GSAP Line Reveal
-───────────────────────────────────────────────────── */
-function useGsapReveal(selector: string, containerRef: React.RefObject<HTMLElement | null>) {
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        selector,
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 80%",
-            once: true,
-          },
-        }
-      );
-    }, containerRef);
-    return () => ctx.revert();
-  }, [selector, containerRef]);
-}
 
-/* ─────────────────────────────────────────────────────
-   Timeline Connector
-───────────────────────────────────────────────────── */
+/* ── Timeline Connector ── */
 function TimelineConnector({ accent, last }: { accent: string; last: boolean }) {
   if (last) return null;
   return (
     <motion.div
-      className="absolute left-[27px] top-20 bottom-0 w-px z-0"
-      style={{
-        background: `linear-gradient(to bottom, ${accent}60 0%, ${accent}10 60%, transparent 100%)`,
-      }}
+      className="absolute left-[19px] sm:left-[27px] top-16 bottom-0 w-px z-0"
+      style={{ background: `linear-gradient(to bottom, ${accent}50, transparent)` }}
       initial={{ scaleY: 0, originY: 0 }}
       whileInView={{ scaleY: 1 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+      transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
     />
   );
 }
 
-/* ─────────────────────────────────────────────────────
-   Experience Card
-───────────────────────────────────────────────────── */
+/* ── Experience Card ── */
 function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
@@ -166,42 +126,31 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
   return (
     <motion.div
       ref={ref}
-      className="experience-card relative flex gap-6"
-      initial={{ opacity: 0, x: -40 }}
+      className="relative flex gap-4 sm:gap-5"
+      initial={{ opacity: 0, x: -20 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.7, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.3, delay: index * 0.08, ease: [0.4, 0, 0.2, 1] }}
     >
       {/* ── Timeline node ── */}
       <div className="relative z-10 flex-shrink-0 flex flex-col items-center pt-1">
         <motion.div
-          className="w-14 h-14 rounded-2xl flex items-center justify-center font-black text-sm tracking-tight border relative overflow-hidden"
+          className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center font-black text-xs tracking-tight border relative overflow-hidden"
           style={{
-            background: `linear-gradient(135deg, ${entry.accentColor}20, ${entry.accentColor}08)`,
-            borderColor: `${entry.accentColor}30`,
+            background: `linear-gradient(135deg, ${entry.accentColor}18, ${entry.accentColor}06)`,
+            borderColor: `${entry.accentColor}25`,
             color: entry.accentColor,
-            boxShadow: `0 0 20px ${entry.accentColor}15`,
           }}
-          whileHover={{ scale: 1.08, rotate: 2, transition: { duration: 0.2 } }}
+          whileHover={{ scale: 1.06, transition: { duration: 0.2 } }}
         >
-          {/* Shimmer on hover */}
-          <div
-            className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300"
-            style={{
-              background: `linear-gradient(135deg, transparent 30%, ${entry.accentColor}20 50%, transparent 70%)`,
-            }}
-          />
-          <span className="relative z-10 text-xs">{entry.logo}</span>
+          <span className="relative z-10 text-[10px] sm:text-xs">{entry.logo}</span>
         </motion.div>
       </div>
 
       {/* ── Main card ── */}
       <motion.div
-        className="group flex-1 mb-10 rounded-2xl border overflow-hidden relative"
-        style={{
-          background: "var(--color-surface)",
-          borderColor: "var(--color-border)",
-        }}
-        whileHover={{ y: -3, transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] } }}
+        className="group flex-1 mb-6 rounded-2xl border overflow-hidden relative"
+        style={{ background: "var(--color-surface)", borderColor: "var(--color-border)" }}
+        whileHover={{ y: -2, transition: { duration: 0.2 } }}
       >
         {/* Hover glow border */}
         <div
@@ -231,18 +180,14 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span
-                  className="text-[10px] font-bold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full"
-                  style={{
-                    background: `${entry.accentColor}12`,
-                    border: `1px solid ${entry.accentColor}25`,
-                    color: entry.accentColor,
-                  }}
+                  className="text-[10px] font-bold tracking-[0.12em] uppercase px-2 py-0.5 rounded-full"
+                  style={{ background: `${entry.accentColor}10`, border: `1px solid ${entry.accentColor}20`, color: entry.accentColor }}
                 >
                   {entry.type}
                 </span>
-                <span className="text-[10px] font-medium" style={{ color: "var(--color-foreground-subtle)" }}>{entry.duration}</span>
+                <span className="text-[10px] font-medium" style={{ color: "var(--color-fg-subtle)" }}>{entry.duration}</span>
               </div>
-              <h3 className="text-lg font-bold leading-tight group-hover:text-white transition-colors" style={{ color: "var(--color-foreground)" }}>
+              <h3 className="text-base font-bold leading-tight" style={{ color: "var(--color-fg)" }}>
                 {entry.role}
               </h3>
               <div className="flex items-center gap-1.5 mt-1">
@@ -252,17 +197,17 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
                 </span>
               </div>
             </div>
-            <div className="flex flex-col items-start sm:items-end gap-1.5 flex-shrink-0">
-              <span className="inline-flex items-center gap-1.5 text-xs font-medium" style={{ color: "var(--color-foreground-muted)" }}>
+            <div className="flex flex-col items-start sm:items-end gap-1 flex-shrink-0">
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium" style={{ color: "var(--color-fg-muted)" }}>
                 <Calendar size={11} /> {entry.period}
               </span>
-              <span className="inline-flex items-center gap-1.5 text-xs" style={{ color: "var(--color-foreground-subtle)" }}>
+              <span className="inline-flex items-center gap-1.5 text-xs" style={{ color: "var(--color-fg-subtle)" }}>
                 <MapPin size={11} /> {entry.location}
               </span>
             </div>
           </div>
 
-          <p className="text-sm leading-relaxed mb-5" style={{ color: "var(--color-foreground-muted)" }}>{entry.description}</p>
+          <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--color-fg-muted)" }}>{entry.description}</p>
 
           {/* Achievements */}
           <div className="space-y-2.5 mb-5">
@@ -282,26 +227,15 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
                   >
                     <Icon size={10} style={{ color: entry.accentColor }} strokeWidth={2.5} />
                   </div>
-                  <span className="text-xs leading-relaxed" style={{ color: "var(--color-foreground-muted)" }}>{ach.text}</span>
+                  <span className="text-xs leading-relaxed" style={{ color: "var(--color-fg-muted)" }}>{ach.text}</span>
                 </motion.div>
               );
             })}
           </div>
 
-          {/* Tech stack */}
-          <div className="flex flex-wrap gap-1.5 pt-4" style={{ borderTop: "1px solid var(--color-border)" }}>
+          <div className="flex flex-wrap gap-1.5 pt-3" style={{ borderTop: "1px solid var(--color-border)" }}>
             {entry.tech.map((t) => (
-              <span
-                key={t}
-                className="text-[10px] font-semibold px-2.5 py-1 rounded-full"
-                style={{
-                  background: "var(--color-surface-3)",
-                  border: "1px solid var(--color-border)",
-                  color: "var(--color-foreground-muted)",
-                }}
-              >
-                {t}
-              </span>
+              <span key={t} className="badge badge-neutral">{t}</span>
             ))}
           </div>
         </div>
@@ -358,21 +292,21 @@ function SummaryStrip() {
   ];
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="grid grid-cols-2 sm:grid-cols-4 gap-px mt-4 mb-16 overflow-hidden rounded-2xl border"
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+      className="grid grid-cols-2 sm:grid-cols-4 gap-px mt-3 mb-12 overflow-hidden rounded-2xl border"
       style={{ background: "var(--color-border)", borderColor: "var(--color-border)" }}
     >
       {items.map((item, i) => (
         <div
           key={i}
-          className="flex flex-col items-center justify-center py-5 px-4 text-center"
+          className="flex flex-col items-center justify-center py-4 px-3 text-center"
           style={{ background: "var(--color-surface)" }}
         >
-          <span className="text-2xl font-black" style={{ color: "var(--color-foreground)" }}>{item.value}</span>
-          <span className="text-[10px] font-semibold tracking-widest uppercase mt-1" style={{ color: "var(--color-foreground-subtle)" }}>
+          <span className="text-xl sm:text-2xl font-black" style={{ color: "var(--color-fg)" }}>{item.value}</span>
+          <span className="text-[10px] font-semibold tracking-widest uppercase mt-1" style={{ color: "var(--color-fg-subtle)" }}>
             {item.label}
           </span>
         </div>
@@ -386,12 +320,10 @@ function SummaryStrip() {
 ───────────────────────────────────────────────────── */
 export default function Experience() {
   const containerRef = useRef<HTMLDivElement>(null);
-  useGsapReveal(".experience-card", containerRef);
 
   return (
-    <section id="experience" aria-label="Experience section" className="relative overflow-hidden" style={{ background: "var(--color-background)" }}>
-      <div className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(237,114,42,0.3),transparent)" }} />
+    <section id="experience" aria-label="Experience section" className="relative overflow-hidden" style={{ background: "var(--color-bg)" }}>
+      <div className="section-sep absolute top-0 left-0" aria-hidden="true" />
 
       {/* BG glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] pointer-events-none"
@@ -414,17 +346,17 @@ export default function Experience() {
 
           {/* Timeline end node */}
           <motion.div
-            className="flex items-center gap-3 pl-6 mt-2"
+            className="flex items-center gap-3 pl-4 sm:pl-6 mt-2"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.5 }}
+            transition={{ duration: 0.3 }}
           >
-            <div className="w-5 h-5 rounded-full border-2 border-white/10 flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-[#ed722a]" />
+            <div className="w-4 h-4 rounded-full border-2 flex items-center justify-center" style={{ borderColor: "var(--color-border)" }}>
+              <div className="w-1.5 h-1.5 rounded-full bg-[#ed722a]" />
             </div>
-            <span className="text-xs text-white/30 font-medium tracking-wide">The journey continues…</span>
-            <Sparkles size={12} className="text-[#ed722a]" />
+            <span className="text-xs font-medium tracking-wide" style={{ color: "var(--color-fg-subtle)" }}>The journey continues…</span>
+            <Sparkles size={11} className="text-[#ed722a]" />
           </motion.div>
         </div>
       </div>

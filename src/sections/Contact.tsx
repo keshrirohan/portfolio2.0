@@ -127,7 +127,7 @@ interface FieldProps {
 function Field({ id, label, error, children }: FieldProps) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-xs font-semibold tracking-wide text-white/50 uppercase">
+      <label htmlFor={id} className="text-xs font-semibold tracking-wide uppercase" style={{ color: "var(--color-fg-muted)" }}>
         {label}
       </label>
       {children}
@@ -149,12 +149,8 @@ function Field({ id, label, error, children }: FieldProps) {
   );
 }
 
-const inputBase =
-  "w-full px-4 py-3 rounded-xl border text-sm text-white placeholder-white/20 outline-none transition-all duration-200 focus:border-[#ed722a] focus:ring-1 focus:ring-[#ed722a]/30";
-const inputStyle = {
-  background: "rgba(255,255,255,0.03)",
-  borderColor: "rgba(255,255,255,0.08)",
-};
+const inputBase = "form-input";
+const inputStyle = {};
 
 /* ─────────────────────────────────────────────────────
    Contact Form
@@ -271,7 +267,7 @@ function ContactForm() {
           style={inputStyle}
           disabled={status === "sending"}
         />
-        <p className="text-[10px] text-white/20 text-right">
+        <p className="text-[10px] text-right" style={{ color: "var(--color-fg-subtle)" }}>
           {formData.message.length} / 500
         </p>
       </Field>
@@ -343,12 +339,11 @@ function SocialCard({ link, index }: { link: SocialLink; index: number }) {
       href={link.href}
       target={link.href.startsWith("http") ? "_blank" : undefined}
       rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-      className="group flex items-center gap-4 p-4 rounded-2xl border border-white/5 transition-all duration-300 overflow-hidden relative"
-      style={{ background: "rgba(255,255,255,0.02)" }}
-      initial={{ opacity: 0, x: 30 }}
+      className="card flex items-center gap-4 p-4 relative overflow-hidden"
+      initial={{ opacity: 0, x: 20 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ delay: index * 0.09, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ delay: index * 0.07, duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       whileHover={{ y: -2, transition: { duration: 0.2 } }}
       aria-label={`${link.label}: ${link.value}`}
     >
@@ -376,13 +371,13 @@ function SocialCard({ link, index }: { link: SocialLink; index: number }) {
 
       {/* Text */}
       <div className="flex-1 min-w-0">
-        <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-white/30 mb-0.5">
+        <p className="text-[10px] font-bold tracking-[0.1em] uppercase mb-0.5" style={{ color: "var(--color-fg-subtle)" }}>
           {link.label}
         </p>
-        <p className="text-sm font-semibold text-white/70 group-hover:text-white transition-colors duration-200 truncate">
+        <p className="text-sm font-semibold truncate transition-colors duration-200" style={{ color: "var(--color-fg)" }}>
           {link.value}
         </p>
-        <p className="text-[11px] text-white/30 mt-0.5">{link.description}</p>
+        <p className="text-[11px] mt-0.5" style={{ color: "var(--color-fg-subtle)" }}>{link.description}</p>
       </div>
 
       <ArrowUpRight
@@ -399,12 +394,11 @@ function SocialCard({ link, index }: { link: SocialLink; index: number }) {
 function AvailabilityCard() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-      className="relative p-5 rounded-2xl border border-white/5 overflow-hidden"
-      style={{ background: "rgba(255,255,255,0.02)" }}
+      transition={{ duration: 0.3, delay: 0.1, ease: [0.4, 0, 0.2, 1] }}
+      className="card relative overflow-hidden"
     >
       <div
         className="absolute top-0 right-0 w-32 h-32 pointer-events-none"
@@ -418,30 +412,20 @@ function AvailabilityCard() {
           </span>
         </div>
         <div>
-          <p className="text-sm font-bold text-white">Open to opportunities</p>
-          <p className="text-xs text-white/40 mt-1 leading-relaxed">
+          <p className="text-sm font-bold" style={{ color: "var(--color-fg)" }}>Open to opportunities</p>
+          <p className="text-xs mt-1 leading-relaxed" style={{ color: "var(--color-fg-muted)" }}>
             Available for full-time roles, freelance projects, and exciting collaborations.
           </p>
           <div className="flex flex-wrap gap-2 mt-3">
             {["Full-time", "Freelance", "Remote"].map((tag) => (
-              <span
-                key={tag}
-                className="text-[10px] font-semibold px-2.5 py-1 rounded-full"
-                style={{
-                  background: "rgba(237,114,42,0.08)",
-                  border: "1px solid rgba(237,114,42,0.2)",
-                  color: "#ed722a",
-                }}
-              >
-                {tag}
-              </span>
+              <span key={tag} className="badge badge-accent">{tag}</span>
             ))}
           </div>
         </div>
       </div>
-      <div className="flex items-center gap-2 mt-4 pt-4 border-t border-white/5">
-        <Clock size={12} className="text-white/30" />
-        <span className="text-[11px] text-white/30">Usually responds within 24 hours · IST (GMT+5:30)</span>
+      <div className="flex items-center gap-2 mt-4 pt-4" style={{ borderTop: "1px solid var(--color-border)" }}>
+        <Clock size={11} style={{ color: "var(--color-fg-subtle)" }} />
+        <span className="text-[11px]" style={{ color: "var(--color-fg-subtle)" }}>Usually responds within 24 hours · IST (GMT+5:30)</span>
       </div>
     </motion.div>
   );
@@ -453,32 +437,16 @@ function AvailabilityCard() {
 function SectionHeader() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="text-center mb-16"
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+      className="section-header"
     >
-      <span className="section-tag">
-        <MessageSquare size={12} /> Get in Touch
-      </span>
-      <h2 className="section-title mt-4">
-        Let&apos;s{" "}
-        <span
-          style={{
-            background: "linear-gradient(135deg,#ed722a,#f59150)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}
-        >
-          Connect
-        </span>
-      </h2>
-      <p className="section-subtitle mx-auto mt-4">
-        Have a project in mind or just want to say hello? My inbox is always open.
-      </p>
-      <div className="divider mx-auto mt-6" />
+      <span className="section-tag"><MessageSquare size={11} /> Get in Touch</span>
+      <h2 className="section-title">Let&apos;s <span className="gradient-text">Connect</span></h2>
+      <p className="section-subtitle mx-auto mt-3">Have a project in mind or just want to say hello? My inbox is always open.</p>
+      <div className="divider mx-auto" />
     </motion.div>
   );
 }
@@ -491,12 +459,8 @@ export default function Contact() {
   const inView = useInView(containerRef, { once: true, margin: "-60px" });
 
   return (
-    <section id="contact" aria-label="Contact section" className="relative overflow-hidden" style={{ background: "var(--color-background)" }}>
-      {/* Top gradient border */}
-      <div
-        className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(237,114,42,0.3),transparent)" }}
-      />
+    <section id="contact" aria-label="Contact section" className="relative overflow-hidden" style={{ background: "var(--color-bg)" }}>
+      <div className="section-sep absolute top-0 left-0" aria-hidden="true" />
 
       {/* Background orbs */}
       <div
@@ -520,9 +484,9 @@ export default function Contact() {
         <div ref={containerRef} className="grid lg:grid-cols-[1fr_420px] gap-10 max-w-6xl mx-auto items-start">
           {/* ── Left: Form ── */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -20 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
             className="relative p-6 sm:p-8 rounded-3xl border overflow-hidden"
             style={{
               background: "var(--color-surface)",
@@ -549,8 +513,8 @@ export default function Contact() {
                   <Send size={15} className="text-[#ed722a]" strokeWidth={2} />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold" style={{ color: "var(--color-foreground)" }}>Send a Message</h3>
-                  <p className="text-xs" style={{ color: "var(--color-foreground-subtle)" }}>I read every message personally.</p>
+                  <h3 className="text-base font-bold" style={{ color: "var(--color-fg)" }}>Send a Message</h3>
+                  <p className="text-xs" style={{ color: "var(--color-fg-subtle)" }}>I read every message personally.</p>
                 </div>
               </div>
               <ContactForm />
@@ -559,9 +523,9 @@ export default function Contact() {
 
           {/* ── Right: Info ── */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 20 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.3, delay: 0.08, ease: [0.4, 0, 0.2, 1] }}
             className="space-y-4"
           >
             {/* Availability */}
@@ -573,19 +537,18 @@ export default function Contact() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.15, duration: 0.5 }}
-              className="flex items-center gap-3 px-4 py-3.5 rounded-2xl border border-white/5"
-              style={{ background: "rgba(255,255,255,0.02)" }}
+              className="card flex items-center gap-3 px-4 py-3.5"
             >
               <MapPin size={16} className="text-[#ed722a] flex-shrink-0" strokeWidth={1.8} />
               <div>
-                <p className="text-sm font-semibold text-white">India · Remote-First</p>
-                <p className="text-xs text-white/35">Open to relocation for the right opportunity</p>
+                <p className="text-sm font-semibold" style={{ color: "var(--color-fg)" }}>India · Remote-First</p>
+                <p className="text-xs" style={{ color: "var(--color-fg-subtle)" }}>Open to relocation for the right opportunity</p>
               </div>
             </motion.div>
 
             {/* Social links */}
             <div className="space-y-3">
-              <p className="text-[10px] font-bold tracking-[0.15em] uppercase text-white/25 px-1">
+              <p className="text-[10px] font-bold tracking-[0.1em] uppercase px-1 mb-2" style={{ color: "var(--color-fg-subtle)" }}>
                 Find me on
               </p>
               {SOCIAL_LINKS.map((link, i) => (
@@ -599,11 +562,10 @@ export default function Contact() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.5 }}
-              className="flex items-center gap-2.5 px-4 py-3 rounded-2xl border border-white/5"
-              style={{ background: "rgba(255,255,255,0.015)" }}
+              className="card flex items-center gap-2.5 px-4 py-3"
             >
               <Sparkles size={14} className="text-[#ed722a] flex-shrink-0" />
-              <p className="text-xs text-white/35 leading-relaxed">
+              <p className="text-xs leading-relaxed" style={{ color: "var(--color-fg-subtle)" }}>
                 Prefer email?{" "}
                 <a
                   href="mailto:keshrirohan@gmail.com"
@@ -624,9 +586,10 @@ export default function Contact() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="border-t border-white/5 mt-20"
+        className="mt-16"
+        style={{ borderTop: "1px solid var(--color-border)" }}
       >
-        <div className="container py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/25">
+        <div className="container py-7 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs" style={{ color: "var(--color-fg-subtle)" }}>
           <p>
             Designed &amp; Built by{" "}
             <span className="text-[#ed722a] font-semibold">Rohan Keshri</span>

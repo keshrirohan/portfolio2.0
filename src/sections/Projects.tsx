@@ -1,9 +1,7 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ExternalLink,
   GitBranch,
@@ -13,18 +11,12 @@ import {
   Brain,
   Dumbbell,
   Star,
-  GitFork,
-  Eye,
   ChevronRight,
   Layers,
-  Terminal,
   Globe,
   Database,
+  Code2,
 } from "lucide-react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 /* ─────────────────────────────────────────────────────
    Types
@@ -86,7 +78,7 @@ const PROJECTS: Project[] = [
     features: [
       { icon: Brain,    text: "AI-generated role-specific interview questions" },
       { icon: Zap,      text: "Real-time answer analysis with NLP scoring" },
-      { icon: Terminal, text: "Live code editor with syntax highlighting" },
+      { icon: Code2,    text: "Live code editor with syntax highlighting" },
       { icon: Layers,   text: "Performance analytics & improvement roadmap" },
       { icon: Globe,    text: "Shareable report cards & interview history" },
       { icon: Database, text: "Personalised question bank with difficulty levels" },
@@ -129,7 +121,7 @@ const PROJECTS: Project[] = [
       { icon: Zap,      text: "Real-time performance analytics dashboard" },
       { icon: Database, text: "Macro & calorie tracker with food search" },
       { icon: Globe,    text: "Community challenges & leaderboards" },
-      { icon: Terminal, text: "Wearable device data integration" },
+      { icon: Code2,    text: "Wearable device data integration" },
       { icon: Layers,   text: "Gamified streaks & milestone system" },
     ],
     metrics: [
@@ -243,9 +235,9 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                   >
                     ● {project.status}
                   </span>
-                  <span className="text-[10px] text-white/30 font-medium">{project.category}</span>
+                  <span className="text-[10px] font-medium" style={{ color: "var(--color-fg-subtle)" }}>{project.category}</span>
                 </div>
-                <h3 className="text-2xl font-black text-white">{project.title}</h3>
+                <h3 className="text-xl font-black" style={{ color: "var(--color-fg)" }}>{project.title}</h3>
                 <p className="text-sm font-medium" style={{ color: project.accentColor }}>{project.tagline}</p>
               </div>
             </div>
@@ -254,25 +246,25 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           {/* Modal body */}
           <div className="p-6 space-y-6">
             {/* Long description */}
-            <p className="text-sm text-white/55 leading-relaxed">{project.longDescription}</p>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--color-fg-muted)" }}>{project.longDescription}</p>
 
             {/* Metrics */}
             <div className="grid grid-cols-3 gap-3">
               {project.metrics.map((m) => (
                 <div
                   key={m.label}
-                  className="text-center p-3 rounded-xl border border-white/5"
-                  style={{ background: `${project.accentColor}06` }}
+                  className="text-center p-3 rounded-xl"
+                  style={{ background: "var(--color-surface-2)", border: "1px solid var(--color-border)" }}
                 >
                   <p className="text-xl font-black" style={{ color: project.accentColor }}>{m.value}</p>
-                  <p className="text-[10px] text-white/35 font-medium mt-0.5 leading-tight">{m.label}</p>
+                  <p className="text-[10px] font-medium mt-0.5 leading-tight" style={{ color: "var(--color-fg-subtle)" }}>{m.label}</p>
                 </div>
               ))}
             </div>
 
             {/* Features */}
             <div>
-              <p className="text-xs font-bold tracking-[0.15em] uppercase text-white/30 mb-3">Key Features</p>
+              <p className="text-xs font-bold tracking-[0.12em] uppercase mb-3" style={{ color: "var(--color-fg-subtle)" }}>Key Features</p>
               <div className="grid sm:grid-cols-2 gap-2">
                 {project.features.map((f, i) => {
                   const FIcon = f.icon;
@@ -430,9 +422,9 @@ function ProjectCard({ project, index, onOpen }: { project: Project; index: numb
               >
                 ● {project.status}
               </span>
-              <span className="text-[10px] text-white/30 font-medium truncate">{project.category}</span>
+              <span className="text-[10px] font-medium truncate" style={{ color: "var(--color-fg-subtle)" }}>{project.category}</span>
             </div>
-            <h3 className="text-lg font-black text-white leading-tight group-hover:text-white transition-colors">
+            <h3 className="text-base font-black leading-tight" style={{ color: "var(--color-fg)" }}>
               {project.title}
             </h3>
             <p className="text-xs font-medium mt-0.5" style={{ color: `${project.accentColor}cc` }}>
@@ -444,38 +436,24 @@ function ProjectCard({ project, index, onOpen }: { project: Project; index: numb
 
       {/* Card body */}
       <div className="p-6 pt-4 flex flex-col flex-1">
-        <p className="text-sm text-white/45 leading-relaxed mb-5 flex-1">{project.description}</p>
+        <p className="text-sm leading-relaxed mb-4 flex-1" style={{ color: "var(--color-fg-muted)" }}>{project.description}</p>
 
         {/* Metrics row */}
         <div className="flex gap-4 mb-5 pb-4 border-b border-white/5">
           {project.metrics.slice(0, 2).map((m) => (
             <div key={m.label}>
               <p className="text-base font-black" style={{ color: project.accentColor }}>{m.value}</p>
-              <p className="text-[10px] text-white/30 font-medium">{m.label}</p>
+              <p className="text-[10px] font-medium" style={{ color: "var(--color-fg-subtle)" }}>{m.label}</p>
             </div>
           ))}
         </div>
 
-        {/* Tech pills */}
-        <div className="flex flex-wrap gap-1.5 mb-5">
+        <div className="flex flex-wrap gap-1.5 mb-4">
           {project.tech.slice(0, 4).map((t) => (
-            <span
-              key={t.name}
-              className="text-[10px] font-semibold px-2.5 py-1 rounded-full"
-              style={{
-                background: `${t.color}10`,
-                border: `1px solid ${t.color}20`,
-                color: `${t.color}cc`,
-              }}
-            >
-              {t.name}
-            </span>
+            <span key={t.name} className="badge badge-neutral">{t.name}</span>
           ))}
           {project.tech.length > 4 && (
-            <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full text-white/30"
-              style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
-              +{project.tech.length - 4} more
-            </span>
+            <span className="badge badge-neutral">+{project.tech.length - 4} more</span>
           )}
         </div>
 
@@ -487,8 +465,7 @@ function ProjectCard({ project, index, onOpen }: { project: Project; index: numb
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/40 hover:text-white px-3 py-1.5 rounded-lg border border-white/8 hover:border-white/20 transition-all duration-200"
-              style={{ background: "rgba(255,255,255,0.03)" }}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold transition-all duration-200 btn btn-ghost py-1.5 px-3 text-[11px]"
               aria-label={`${project.title} GitHub repository`}
             >
               <GitBranch size={13} /> GitHub
@@ -529,64 +506,20 @@ function ProjectCard({ project, index, onOpen }: { project: Project; index: numb
 function SectionHeader() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="text-center mb-16"
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+      className="section-header"
     >
-      <span className="section-tag">
-        <Layers size={12} /> Selected Work
-      </span>
-      <h2 className="section-title mt-4">
-        Featured{" "}
-        <span
-          style={{
-            background: "linear-gradient(135deg,#ed722a,#f59150)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}
-        >
-          Projects
-        </span>
-      </h2>
-      <p className="section-subtitle mx-auto mt-4">
-        Products I&apos;ve designed, built, and shipped — from concept to production.
-      </p>
-      <div className="divider mx-auto mt-6" />
+      <span className="section-tag"><Layers size={11} /> Selected Work</span>
+      <h2 className="section-title">Featured <span className="gradient-text">Projects</span></h2>
+      <p className="section-subtitle mx-auto mt-3">Products I&apos;ve designed, built, and shipped — from concept to production.</p>
+      <div className="divider mx-auto" />
     </motion.div>
   );
 }
 
-/* ─────────────────────────────────────────────────────
-   GSAP Reveal Hook
-───────────────────────────────────────────────────── */
-function useGsapReveal(selector: string, containerRef: React.RefObject<HTMLElement | null>) {
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        selector,
-        { opacity: 0, y: 50, scale: 0.97 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.9,
-          stagger: 0.18,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 82%",
-            once: true,
-          },
-        }
-      );
-    }, containerRef);
-    return () => ctx.revert();
-  }, [selector, containerRef]);
-}
 
 /* ─────────────────────────────────────────────────────
    Main Export
@@ -595,17 +528,13 @@ export default function Projects() {
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGsapReveal(".project-card", containerRef);
-
   const openModal = useCallback((id: string) => setActiveModal(id), []);
   const closeModal = useCallback(() => setActiveModal(null), []);
-
   const activeProject = PROJECTS.find((p) => p.id === activeModal);
 
   return (
-    <section id="projects" aria-label="Projects section" className="relative overflow-hidden" style={{ background: "var(--color-background)" }}>
-      <div className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(237,114,42,0.3),transparent)" }} />
+    <section id="projects" aria-label="Projects section" className="relative overflow-hidden section-alt">
+      <div className="section-sep absolute top-0 left-0" aria-hidden="true" />
 
       {/* Background glow */}
       <div className="absolute top-1/4 right-0 w-[600px] h-[600px] pointer-events-none"
@@ -636,21 +565,21 @@ export default function Projects() {
 
         {/* Footer CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-center mt-14"
+          transition={{ duration: 0.3 }}
+          className="text-center mt-12"
         >
           <div className="inline-flex items-center gap-4 flex-wrap justify-center">
-            <span className="text-sm text-white/35 font-medium">More projects on GitHub</span>
+            <span className="text-sm font-medium" style={{ color: "var(--color-fg-subtle)" }}>More projects on GitHub</span>
             <a
               href="https://github.com/keshrirohan"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 text-sm font-semibold text-white/70 hover:text-white hover:border-white/25 transition-all duration-200"
-              style={{ background: "rgba(255,255,255,0.03)" }}
+              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl btn btn-ghost text-sm"
               id="projects-github-link"
+              aria-label="View all projects on GitHub"
             >
               <GitBranch size={15} />
               github.com/keshrirohan
