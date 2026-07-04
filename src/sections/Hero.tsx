@@ -6,7 +6,7 @@ import { loadSlim } from "@tsparticles/slim";
 import { motion, useMotionValue, useSpring, type Transition } from "framer-motion";
 import { Download, Mail, ArrowDown, Code2, Database, Globe, Layers, Cpu, Zap, GitBranch, Box } from "lucide-react";
 import type { Engine } from "@tsparticles/engine";
-import type { ISourceOptions } from "@tsparticles/engine";
+import type { ISourceOptions } from "@tsparticles/engine"; 
 
 /* ─────────────────────────────────────────────────────
    Particle Config
@@ -17,7 +17,6 @@ const particlesOptions: ISourceOptions = {
   interactivity: {
     events: {
       onHover: { enable: true, mode: "grab" },
-      onClick: { enable: true, mode: "push" },
     },
     modes: {
       grab: { distance: 160, links: { opacity: 0.5 } },
