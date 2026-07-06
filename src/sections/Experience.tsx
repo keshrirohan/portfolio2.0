@@ -18,30 +18,33 @@ import {
 /* ─────────────────────────────────────────────────────
    Types
 ───────────────────────────────────────────────────── */
+// Describes a single bullet-point achievement on a job card
 interface Achievement {
-  icon: React.ElementType;
-  text: string;
+  icon: React.ElementType; // the small icon shown next to the text (e.g. TrendingUp, Users)
+  text: string;            // the achievement description, e.g. "Boosted load speed by 55%"
 }
 
+// Describes everything needed to display one job / experience entry
 interface ExperienceEntry {
-  id: string;
-  role: string;
-  company: string;
-  companyUrl?: string;
-  period: string;
-  duration: string;
-  location: string;
-  type: string;
-  description: string;
-  achievements: Achievement[];
-  tech: string[];
-  accentColor: string;
-  logo: string; // emoji / initials fallback
+  id: string;              // unique identifier used as the React list key
+  role: string;            // the job title, e.g. "Full Stack Developer"
+  company: string;         // the company name
+  companyUrl?: string;     // optional link to the company website
+  period: string;          // date range, e.g. "Jun 2024 – Present"
+  duration: string;        // short duration label, e.g. "1+ yr"
+  location: string;        // where the job was, e.g. "Remote, India"
+  type: string;            // employment type: "Full-time", "Contract", or "Internship"
+  description: string;     // a paragraph describing the work done
+  achievements: Achievement[]; // list of key wins / bullet points
+  tech: string[];          // tools and technologies used, shown as badge pills
+  accentColor: string;     // brand color for this entry (hex), used on borders and icons
+  logo: string; // emoji / initials fallback — shown in the timeline node square
 }
 
 /* ─────────────────────────────────────────────────────
    Data
 ───────────────────────────────────────────────────── */
+// Each object here is one job entry that will appear as a card in the timeline
 const EXPERIENCES: ExperienceEntry[] = [
   {
     id: "amazing-indian-stories",
@@ -104,6 +107,9 @@ const EXPERIENCES: ExperienceEntry[] = [
 
 
 /* ── Timeline Connector ── */
+// This draws a thin vertical line between two job cards.
+// It visually "connects" the timeline nodes so the cards look linked top-to-bottom.
+// We skip rendering it for the last card because there is nothing below it to connect to.
 function TimelineConnector({ accent, last }: { accent: string; last: boolean }) {
   if (last) return null;
   return (
@@ -119,11 +125,15 @@ function TimelineConnector({ accent, last }: { accent: string; last: boolean }) 
 }
 
 /* ── Experience Card ── */
+// Renders one job entry as a card with a logo node on the left and details on the right.
 function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
+  // useInView watches the card — when it scrolls into view, inView becomes true,
+  // which triggers the fade-in and slide-in animation defined below.
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
+    // The whole card starts invisible (opacity 0, shifted left) and animates in once visible
     <motion.div
       ref={ref}
       className="relative flex gap-4 sm:gap-5"
@@ -132,6 +142,7 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
       transition={{ duration: 0.3, delay: index * 0.08, ease: [0.4, 0, 0.2, 1] }}
     >
       {/* ── Timeline node ── */}
+      {/* The small colored square with the company initials, sitting on the left of the card */}
       <div className="relative z-10 flex-shrink-0 flex flex-col items-center pt-1">
         <motion.div
           className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center font-black text-xs tracking-tight border relative overflow-hidden"
@@ -147,6 +158,7 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
       </div>
 
       {/* ── Main card ── */}
+      {/* The large white/dark box containing role, company, description, achievements, and tech */}
       <motion.div
         className="group flex-1 mb-6 rounded-2xl border overflow-hidden relative"
         style={{ background: "var(--color-surface)", borderColor: "var(--color-border)" }}
@@ -166,6 +178,7 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
             transition: "opacity 0.3s",
           }}
         />
+        {/* Animated top stripe that grows left-to-right when the card enters view */}
         <motion.div
           className="absolute top-0 left-0 right-0 h-[2px]"
           style={{ background: `linear-gradient(90deg, ${entry.accentColor}, transparent)` }}
@@ -175,10 +188,11 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
         />
 
         <div className="p-6 lg:p-7">
-          {/* Header */}
+          {/* Header — job title, company name, date range, and location */}
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
+                {/* Employment type badge (e.g. "Full-time") and duration label */}
                 <span
                   className="text-[10px] font-bold tracking-[0.12em] uppercase px-2 py-0.5 rounded-full"
                   style={{ background: `${entry.accentColor}10`, border: `1px solid ${entry.accentColor}20`, color: entry.accentColor }}
@@ -198,22 +212,26 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
               </div>
             </div>
             <div className="flex flex-col items-start sm:items-end gap-1 flex-shrink-0">
+              {/* Date range with a calendar icon */}
               <span className="inline-flex items-center gap-1.5 text-xs font-medium" style={{ color: "var(--color-fg-muted)" }}>
                 <Calendar size={11} /> {entry.period}
               </span>
+              {/* Location with a map pin icon */}
               <span className="inline-flex items-center gap-1.5 text-xs" style={{ color: "var(--color-fg-subtle)" }}>
                 <MapPin size={11} /> {entry.location}
               </span>
             </div>
           </div>
 
+          {/* Short paragraph describing the work done at this job */}
           <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--color-fg-muted)" }}>{entry.description}</p>
 
-          {/* Achievements */}
+          {/* Achievements list — each item fades in with a slight delay after the card appears */}
           <div className="space-y-2.5 mb-5">
             {entry.achievements.map((ach, i) => {
               const Icon = ach.icon;
               return (
+                // Each achievement slides in from the left, staggered so they appear one after another
                 <motion.div
                   key={i}
                   className="flex items-start gap-2.5"
@@ -221,6 +239,7 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
                   animate={inView ? { opacity: 1, x: 0 } : {}}
                   transition={{ delay: index * 0.12 + 0.3 + i * 0.08, duration: 0.5 }}
                 >
+                  {/* Small colored icon box on the left */}
                   <div
                     className="flex-shrink-0 w-5 h-5 rounded-md flex items-center justify-center mt-0.5"
                     style={{ background: `${entry.accentColor}15` }}
@@ -233,6 +252,7 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
             })}
           </div>
 
+          {/* Tech badge pills — each tool/language used at this job shown as a small label */}
           <div className="flex flex-wrap gap-1.5 pt-3" style={{ borderTop: "1px solid var(--color-border)" }}>
             {entry.tech.map((t) => (
               <span key={t} className="badge badge-neutral">{t}</span>
@@ -247,6 +267,8 @@ function ExperienceCard({ entry, index }: { entry: ExperienceEntry; index: numbe
 /* ─────────────────────────────────────────────────────
    Section Header
 ───────────────────────────────────────────────────── */
+// Renders the "Work Experience" heading and subtitle at the top of the section.
+// It fades in and slides up when the section scrolls into view.
 function SectionHeader() {
   return (
     <motion.div
@@ -283,12 +305,15 @@ function SectionHeader() {
 /* ─────────────────────────────────────────────────────
    Summary strip
 ───────────────────────────────────────────────────── */
+// Shows a quick-glance grid of career stats (companies, years, features, domains).
+// Each number is the "value" and the word below it is the "label".
 function SummaryStrip() {
+  // Each object is one stat cell: a big number and a small label beneath it
   const items = [
-    { value: "3", label: "Companies" },
-    { value: "2+", label: "Years Total" },
-    { value: "15+", label: "Features Shipped" },
-    { value: "3", label: "Domains" },
+    { value: "3",   label: "Companies" },       // total companies worked at
+    { value: "2+",  label: "Years Total" },      // total years of experience
+    { value: "15+", label: "Features Shipped" }, // features built and released
+    { value: "3",   label: "Domains" },          // industries: healthcare, media, education
   ];
   return (
     <motion.div
@@ -318,6 +343,9 @@ function SummaryStrip() {
 /* ─────────────────────────────────────────────────────
    Main Export
 ───────────────────────────────────────────────────── */
+// The full Experience section — a vertical timeline of job cards.
+// Each card sits inside a wrapper that also renders a TimelineConnector (the vertical line)
+// between itself and the next card, creating a top-to-bottom timeline layout.
 export default function Experience() {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -325,7 +353,7 @@ export default function Experience() {
     <section id="experience" aria-label="Experience section" className="relative overflow-hidden" style={{ background: "var(--color-bg)" }}>
       <div className="section-sep absolute top-0 left-0" aria-hidden="true" />
 
-      {/* BG glow */}
+      {/* BG glow — a soft orange radial light behind the section for visual depth */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] pointer-events-none"
         style={{
           background: "radial-gradient(ellipse,rgba(237,114,42,0.05) 0%,transparent 70%)",
@@ -336,15 +364,17 @@ export default function Experience() {
         <SectionHeader />
         <SummaryStrip />
 
+        {/* Timeline container — each job entry has a connector line above it and a card */}
         <div ref={containerRef} className="relative max-w-3xl mx-auto">
           {EXPERIENCES.map((entry, i) => (
             <div key={entry.id} className="relative">
+              {/* Draw a line connecting this card to the next one below it */}
               <TimelineConnector accent={entry.accentColor} last={i === EXPERIENCES.length - 1} />
               <ExperienceCard entry={entry} index={i} />
             </div>
           ))}
 
-          {/* Timeline end node */}
+          {/* Timeline end node — a small dot at the bottom to close the timeline visually */}
           <motion.div
             className="flex items-center gap-3 pl-4 sm:pl-6 mt-2"
             initial={{ opacity: 0 }}

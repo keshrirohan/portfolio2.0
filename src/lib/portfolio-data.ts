@@ -3,19 +3,29 @@
  * Update this file to personalise the portfolio content.
  */
 
+// ============================================================
+// 🗂️ THIS IS THE MAIN DATA FILE FOR YOUR PORTFOLIO.
+// Edit the values below to make the site your own.
+// You don't need to touch any other file just to update content.
+// ============================================================
+
+// ✏️ EDIT THIS — your basic personal details shown across the site
 export const personalInfo = {
-  name: "Rohan Keshri",
-  title: "Software Engineer",
-  tagline: "Building scalable full-stack products with React, Next.js & Node.js",
-  email: "keshrirohan@example.com",
-  github: "https://github.com/keshrirohan",
-  linkedin: "https://linkedin.com/in/keshrirohan",
-  twitter: "https://twitter.com/keshrirohan",
-  location: "India",
-  available: true,
+  name: "Rohan Keshri",       // Your full name displayed in the hero section
+  title: "Software Engineer", // Your job title shown under your name
+  tagline: "Building scalable full-stack products with React, Next.js & Node.js", // One-liner about what you do
+  email: "keshrirohan@example.com",                   // Used in the contact section
+  github: "https://github.com/keshrirohan",           // Link to your GitHub profile
+  linkedin: "https://linkedin.com/in/keshrirohan",    // Link to your LinkedIn profile
+  twitter: "https://twitter.com/keshrirohan",         // Link to your Twitter/X profile
+  location: "India",                                  // Where you're based
+  available: true,                                    // Set to false if you're not open to new work
 } as const;
 
+// ✏️ EDIT THIS — list your technical skills, grouped by category
+// Add or remove items inside each array to match your actual skills.
 export const skills = {
+  // Technologies you use to build what users see in the browser
   frontend: [
     "React",
     "Next.js",
@@ -25,18 +35,21 @@ export const skills = {
     "GSAP",
     "Three.js",
   ],
+  // Technologies you use to build servers and APIs
   backend: [
     "Node.js",
     "Express.js",
     "REST APIs",
     "GraphQL",
   ],
+  // Databases and data storage tools you know
   database: [
     "MongoDB",
     "PostgreSQL",
     "Redis",
     "Mongoose",
   ],
+  // Other tools and software you use in your workflow
   tools: [
     "Git",
     "Docker",
@@ -47,6 +60,16 @@ export const skills = {
   ],
 } as const;
 
+// ✏️ EDIT THIS — your portfolio projects
+// To add a new project, copy one { } block, paste it below, and update the values.
+// Each field:
+//   id          — a unique number string for this project (just keep incrementing: "2", "3", ...)
+//   title       — the project's name
+//   description — a short sentence about what the project does
+//   tags        — technologies used (shown as small badges)
+//   github      — link to the GitHub repo (use "#" if it's private)
+//   live        — link to the live site (use "#" if not deployed yet)
+//   featured    — set true to highlight this project in the featured section
 export const projects = [
   {
     id: "1",
@@ -60,6 +83,15 @@ export const projects = [
   },
 ] as const;
 
+// ✏️ EDIT THIS — your work experience / job history
+// To add a new job, copy one { } block, paste it below, and update the values.
+// Each field:
+//   id          — a unique number string (keep incrementing: "2", "3", ...)
+//   role        — your job title at that company
+//   company     — the company name
+//   duration    — time period you worked there (e.g. "Jan 2023 – Dec 2024")
+//   description — one or two sentences about what you did there
+//   skills      — technologies you used in that role (shown as badges)
 export const experience = [
   {
     id: "1",
@@ -72,11 +104,14 @@ export const experience = [
   },
 ] as const;
 
+// ✏️ EDIT THIS — the links shown in the top navigation bar
+// label = the text the user sees, href = the section it scrolls to on the page.
+// The "#" before each name is an "anchor link" — it jumps to that section's id on the page.
 export const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Projects", href: "#projects" },
+  { label: "Home",       href: "#home" },
+  { label: "About",      href: "#about" },
+  { label: "Skills",     href: "#skills" },
+  { label: "Projects",   href: "#projects" },
   { label: "Experience", href: "#experience" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact",    href: "#contact" },
 ] as const;
