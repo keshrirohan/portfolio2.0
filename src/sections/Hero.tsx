@@ -116,7 +116,7 @@ const TITLES = [
   "Next.js Specialist",
   "React Developer",
 ];
-
+// used for typing effect in the hero section
 function useTypingEffect(words: string[], typingSpeed = 80, deletingSpeed = 40, pauseMs = 1800) {
   const [displayed, setDisplayed] = useState("");
   const [wordIndex, setWordIndex] = useState(0);
@@ -167,16 +167,16 @@ interface MagneticButtonProps {
   id?: string;
   download?: boolean | string;
 }
-
+// A button or anchor element that reacts to mouse movement, creating a magnetic effect.
 function MagneticButton({ children, className = "", style, href, onClick, id, download }: MagneticButtonProps) {
-  const ref = useRef<HTMLElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 200, damping: 15 });
-  const springY = useSpring(y, { stiffness: 200, damping: 15 });
+  const ref = useRef<HTMLElement>(null); // Ref for the button or anchor element
+  const x = useMotionValue(0); // Motion value for the x-axis translation
+  const y = useMotionValue(0);// Motion value for the y-axis translation
+  const springX = useSpring(x, { stiffness: 200, damping: 15 });// Spring animation for smooth x-axis movement
+  const springY = useSpring(y, { stiffness: 200, damping: 15 });// Spring animation for smooth y-axis movement
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    const rect = ref.current?.getBoundingClientRect();
+    const rect = ref.current?.getBoundingClientRect();  // ?. used to avoid TypeScript error if ref.current is null 
     if (!rect) return;
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
