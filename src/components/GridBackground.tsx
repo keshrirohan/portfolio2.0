@@ -3,7 +3,13 @@
 import * as React from "react";
 import { gsap } from "@/lib/gsap";
 
-export function GridBackground() {
+import { cn } from "@/lib/utils";
+
+interface GridBackgroundProps {
+  className?: string;
+}
+
+export function GridBackground({ className }: GridBackgroundProps = {}) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const gridRef = React.useRef<SVGSVGElement>(null);
 
@@ -39,7 +45,7 @@ export function GridBackground() {
   return (
     <div
       ref={containerRef}
-      className="absolute inset-0 pointer-events-none -z-10 overflow-hidden"
+      className={cn("absolute inset-0 pointer-events-none z-10 overflow-hidden", className)}
       aria-hidden="true"
     >
       {/* Ambient Radial Glow centered in Hero */}

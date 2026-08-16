@@ -12,6 +12,7 @@ import { gsap } from "@/lib/gsap";
 
 export function Hero() {
   const containerRef = React.useRef<HTMLElement>(null);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
   const badgeRef = React.useRef<HTMLDivElement>(null);
   const headingRef = React.useRef<HTMLHeadingElement>(null);
   const descRef = React.useRef<HTMLParagraphElement>(null);
@@ -28,6 +29,32 @@ export function Hero() {
     "MongoDB",
     "TypeScript",
   ];
+
+  React.useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.defaultMuted = true;
+      video.muted = true;
+
+      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const handleMotionChange = () => {
+        if (mediaQuery.matches) {
+          video.pause();
+        } else {
+          video.play().catch(() => {
+            // Autoplay policy fallback
+          });
+        }
+      };
+
+      handleMotionChange();
+
+      mediaQuery.addEventListener("change", handleMotionChange);
+      return () => {
+        mediaQuery.removeEventListener("change", handleMotionChange);
+      };
+    }
+  }, []);
 
   React.useEffect(() => {
     const ctx = gsap.context(() => {
@@ -82,10 +109,30 @@ export function Hero() {
       id="hero"
       className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden"
     >
-      {/* Hero-Scoped Grid & Ambient Glow */}
-      <GridBackground />
+      {/* Background Video - z-0 */}
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0 motion-reduce:hidden"
+      >
+        <source src="/bg.mp4" type="video/mp4" />
+      </video>
 
-      <div className="container max-w-5xl mx-auto px-4 md:px-6 flex flex-col items-center text-center">
+      {/* Subtle Dark Overlay for Text Readability - z-5 */}
+      <div
+        className="absolute inset-0 bg-black/50 dark:bg-black/60 pointer-events-none z-5"
+        aria-hidden="true"
+      />
+
+      {/* Hero-Scoped Grid & Ambient Glow - z-10 */}
+      <GridBackground className="z-10" />
+
+      <div className="container relative z-20 max-w-5xl mx-auto px-4 md:px-6 flex flex-col items-center text-center">
         {/* Badge status */}
         <div
           ref={badgeRef}
