@@ -27,7 +27,7 @@ export function Hero() {
   const terminalRef = React.useRef<HTMLDivElement>(null);
 
   const imagesRef = React.useRef<HTMLImageElement[]>([]);
-  const currentFrameRef = React.useRef<number>(0);
+  const currentFrameRef = React.useRef<number>(TOTAL_FRAMES - 1);
 
   const coreTech = [
     "React.js",
@@ -75,8 +75,10 @@ export function Hero() {
     const imgWidth = img.naturalWidth;
     const imgHeight = img.naturalHeight;
 
-    const isDesktop = canvasWidth >= 1024;
+    const isDesktopLarge = canvasWidth >= 1200;
+    const isLaptop = canvasWidth >= 1024 && canvasWidth < 1200;
     const isTablet = canvasWidth >= 768 && canvasWidth < 1024;
+    const isMobile = canvasWidth < 768;
 
     // Full-Screen COVER Scale
     const scaleX = canvasWidth / imgWidth;
@@ -90,13 +92,19 @@ export function Hero() {
     const faceImageX = imgWidth * 0.45;
     const faceScaledX = faceImageX * scale;
 
-    // Position face center at 68% of Hero canvas width on desktop (65% on tablet)
-    const targetFaceCanvasX = isDesktop
-      ? canvasWidth * 0.68
-      : isTablet
-      ? canvasWidth * 0.65
-      : canvasWidth * 0.50;
+    // Target face center X coordinate per breakpoint to guarantee zero overlap
+    let targetRatio = 0.68;
+    if (isDesktopLarge) {
+      targetRatio = 0.68;
+    } else if (isLaptop) {
+      targetRatio = 0.75;
+    } else if (isTablet) {
+      targetRatio = 0.78;
+    } else if (isMobile) {
+      targetRatio = 0.85;
+    }
 
+    const targetFaceCanvasX = canvasWidth * targetRatio;
     const offsetX = targetFaceCanvasX - faceScaledX;
 
     // Vertical positioning: center vertically with top bias to preserve top of head
@@ -254,7 +262,7 @@ export function Hero() {
     <section
       ref={containerRef}
       id="hero"
-      className="relative min-h-[92vh] flex items-center pt-28 pb-16 overflow-hidden bg-background"
+      className="relative min-h-[92vh] flex items-center pt-24 sm:pt-28 pb-12 sm:pb-16 overflow-hidden bg-background"
     >
       {/* Background Frame Sequence Canvas (Full-Screen Cover) - z-0 */}
       <canvas
@@ -264,34 +272,34 @@ export function Hero() {
       />
 
       {/* Dark Gradient Overlay - z-10 */}
-      {/* Solid dark on left 0-45% for text readability, transitioning smoothly to transparent over right portrait zone */}
+      {/* Horizontal split gradient for text contrast across all screen sizes */}
       <div
-        className="absolute inset-0 bg-gradient-to-r from-background via-background/90 via-48% to-transparent pointer-events-none z-10"
+        className="absolute inset-0 bg-gradient-to-r from-background via-background/95 via-50% md:via-48% to-transparent pointer-events-none z-10"
         aria-hidden="true"
       />
-      {/* Subtle top vignette & bottom section fade */}
+      {/* Top & bottom vignettes */}
       <div
         className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background pointer-events-none z-10"
         aria-hidden="true"
       />
 
       {/* Hero Content Container - z-20 */}
-      <div className="container relative z-20 max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16 xl:px-20 flex items-center">
-        {/* Left Zone: Restricted to ~42% width on desktop to prevent any face overlap */}
-        <div className="w-full lg:w-[44%] xl:w-[40%] max-w-[620px] flex flex-col items-center text-center lg:items-start lg:text-left">
+      <div className="container relative z-20 max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-14 xl:px-20 flex items-center min-h-[80vh]">
+        {/* Content Zone: Strictly bounded per breakpoint to guarantee zero portrait overlap */}
+        <div className="w-full md:w-[46%] lg:w-[42%] xl:w-[40%] max-w-[340px] xs:max-w-[400px] sm:max-w-[440px] md:max-w-[460px] lg:max-w-[520px] xl:max-w-[620px] flex flex-col items-start text-left py-6 sm:py-8">
           {/* Availability status badge */}
           <div
             ref={badgeRef}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary text-xs font-medium mb-5 backdrop-blur-md"
+            className="inline-flex items-center gap-2 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary text-[10px] sm:text-xs font-medium mb-3 sm:mb-5 backdrop-blur-md"
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
             <span>Available for Full Stack Opportunities</span>
           </div>
 
           {/* Main Heading */}
           <h1
             ref={headingRef}
-            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-5 text-foreground max-w-[580px]"
+            className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.1] mb-3 sm:mb-5 text-foreground max-w-[580px]"
           >
             Full Stack Developer
           </h1>
@@ -299,7 +307,7 @@ export function Hero() {
           {/* Professional Summary */}
           <p
             ref={descRef}
-            className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-[560px] font-normal leading-relaxed mb-6"
+            className="text-muted-foreground text-xs sm:text-sm md:text-base lg:text-lg max-w-[560px] font-normal leading-relaxed mb-4 sm:mb-6"
           >
             {profile.summary}
           </p>
@@ -307,13 +315,13 @@ export function Hero() {
           {/* Core Stack Badges */}
           <div
             ref={badgesRef}
-            className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-8 max-w-[560px]"
+            className="flex flex-wrap items-center justify-start gap-1 sm:gap-2 mb-5 sm:mb-8 max-w-[560px]"
           >
             {coreTech.map((tech) => (
               <Badge
                 key={tech}
                 variant="secondary"
-                className="px-3 py-1 text-xs font-mono font-medium rounded-md border border-border/60 bg-secondary/60 hover:bg-secondary transition-colors"
+                className="px-2 py-0.5 sm:px-3 sm:py-1 text-[10px] sm:text-xs font-mono font-medium rounded-md border border-border/60 bg-secondary/60 hover:bg-secondary transition-colors"
               >
                 {tech}
               </Badge>
@@ -323,27 +331,27 @@ export function Hero() {
           {/* CTA Buttons */}
           <div
             ref={ctaRef}
-            className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 w-full sm:w-auto mb-8 max-w-[560px]"
+            className="flex flex-col sm:flex-row items-center justify-start gap-2.5 sm:gap-3 w-full sm:w-auto mb-5 sm:mb-8 max-w-[560px]"
           >
             <Link
               href="#projects"
               className={cn(
                 buttonVariants({ size: "lg" }),
-                "w-full sm:w-auto rounded-full gap-2 px-6 font-semibold shadow-sm focus-visible:ring-2 focus-visible:ring-primary"
+                "w-full sm:w-auto rounded-full gap-2 px-5 sm:px-6 font-semibold shadow-sm text-xs sm:text-sm focus-visible:ring-2 focus-visible:ring-primary"
               )}
             >
               <span>View Projects</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </Link>
 
             <Link
               href="#contact"
               className={cn(
                 buttonVariants({ size: "lg", variant: "outline" }),
-                "w-full sm:w-auto rounded-full gap-2 px-6 font-semibold focus-visible:ring-2 focus-visible:ring-primary"
+                "w-full sm:w-auto rounded-full gap-2 px-5 sm:px-6 font-semibold text-xs sm:text-sm focus-visible:ring-2 focus-visible:ring-primary"
               )}
             >
-              <Mail className="w-4 h-4" />
+              <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span>Contact Me</span>
             </Link>
 
@@ -351,10 +359,10 @@ export function Hero() {
               href="#contact"
               className={cn(
                 buttonVariants({ size: "lg", variant: "ghost" }),
-                "w-full sm:w-auto rounded-full gap-2 px-6 font-medium text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+                "w-full sm:w-auto rounded-full gap-2 px-5 sm:px-6 font-medium text-xs sm:text-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
               )}
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span>Resume</span>
             </a>
           </div>
@@ -362,7 +370,7 @@ export function Hero() {
           {/* Developer Terminal Code Snippet Preview */}
           <div
             ref={terminalRef}
-            className="w-full max-w-[500px] rounded-lg border border-border/60 bg-card/50 backdrop-blur-md p-3.5 text-left shadow-lg overflow-hidden font-mono text-[11px] text-muted-foreground/90 opacity-90 hover:opacity-100 transition-opacity"
+            className="hidden md:block w-full max-w-[440px] lg:max-w-[500px] rounded-lg border border-border/60 bg-card/50 backdrop-blur-md p-3 sm:p-3.5 text-left shadow-lg overflow-hidden font-mono text-[10px] sm:text-[11px] text-muted-foreground/90 opacity-90 hover:opacity-100 transition-opacity"
           >
             <div className="flex items-center gap-2 mb-2 pb-1.5 border-b border-border/30">
               <div className="flex gap-1.5">
