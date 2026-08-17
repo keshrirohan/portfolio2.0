@@ -5,20 +5,29 @@ import Link from "next/link";
 import { ArrowRight, Download, Mail, Terminal as TerminalIcon, Sparkles } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { GridBackground } from "@/components/GridBackground";
 import { profile } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
 import { gsap } from "@/lib/gsap";
 
+const TOTAL_FRAMES = 120;
+
+function getFrameUrl(index: number) {
+  const frameNumber = String(index + 1).padStart(3, "0");
+  return `/ezgif-3ac0533ccbf2f23b-jpg/ezgif-frame-${frameNumber}.jpg`;
+}
+
 export function Hero() {
   const containerRef = React.useRef<HTMLElement>(null);
-  const videoRef = React.useRef<HTMLVideoElement>(null);
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const badgeRef = React.useRef<HTMLDivElement>(null);
   const headingRef = React.useRef<HTMLHeadingElement>(null);
   const descRef = React.useRef<HTMLParagraphElement>(null);
   const badgesRef = React.useRef<HTMLDivElement>(null);
   const ctaRef = React.useRef<HTMLDivElement>(null);
   const terminalRef = React.useRef<HTMLDivElement>(null);
+
+  const imagesRef = React.useRef<HTMLImageElement[]>([]);
+  const currentFrameRef = React.useRef<number>(0);
 
   const coreTech = [
     "React.js",
@@ -30,32 +39,149 @@ export function Hero() {
     "TypeScript",
   ];
 
-  React.useEffect(() => {
-    const video = videoRef.current;
-    if (video) {
-      video.defaultMuted = true;
-      video.muted = true;
+  const drawFrame = React.useCallback((frameIndex: number) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-      const handleMotionChange = () => {
-        if (mediaQuery.matches) {
-          video.pause();
-        } else {
-          video.play().catch(() => {
-            // Autoplay policy fallback
-          });
+    const clampedIndex = Math.max(0, Math.min(TOTAL_FRAMES - 1, Math.round(frameIndex)));
+    currentFrameRef.current = clampedIndex;
+
+    let img = imagesRef.current[clampedIndex];
+    if (!img || !img.complete || img.naturalWidth === 0) {
+      // Fallback search for nearest loaded frame
+      for (let offset = 1; offset < TOTAL_FRAMES; offset++) {
+        const prev = clampedIndex - offset;
+        if (prev >= 0 && imagesRef.current[prev]?.complete && imagesRef.current[prev].naturalWidth > 0) {
+          img = imagesRef.current[prev];
+          break;
         }
-      };
-
-      handleMotionChange();
-
-      mediaQuery.addEventListener("change", handleMotionChange);
-      return () => {
-        mediaQuery.removeEventListener("change", handleMotionChange);
-      };
+        const next = clampedIndex + offset;
+        if (next < TOTAL_FRAMES && imagesRef.current[next]?.complete && imagesRef.current[next].naturalWidth > 0) {
+          img = imagesRef.current[next];
+          break;
+        }
+      }
     }
+
+    if (!img || !img.complete || img.naturalWidth === 0) return;
+
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+    if (canvasWidth === 0 || canvasHeight === 0) return;
+
+    const imgWidth = img.naturalWidth;
+    const imgHeight = img.naturalHeight;
+    const imgRatio = imgWidth / imgHeight;
+    const canvasRatio = canvasWidth / canvasHeight;
+
+    let drawWidth = canvasWidth;
+    let drawHeight = canvasHeight;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    if (canvasRatio > imgRatio) {
+      drawHeight = canvasWidth / imgRatio;
+      offsetY = (canvasHeight - drawHeight) / 2;
+    } else {
+      drawWidth = canvasHeight * imgRatio;
+      offsetX = (canvasWidth - drawWidth) / 2;
+    }
+
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
   }, []);
 
+  const updateCanvasSize = React.useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const width = canvas.offsetWidth;
+    const height = canvas.offsetHeight;
+    if (width === 0 || height === 0) return;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+
+    drawFrame(currentFrameRef.current);
+  }, [drawFrame]);
+
+  // Frame preloading and GSAP ScrollTrigger scroll scrubbing
+  React.useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const images: HTMLImageElement[] = new Array(TOTAL_FRAMES);
+    imagesRef.current = images;
+
+    // Load first frame immediately
+    const firstImg = new Image();
+    firstImg.src = getFrameUrl(0);
+    images[0] = firstImg;
+
+    const onFirstLoad = () => {
+      updateCanvasSize();
+      drawFrame(0);
+    };
+
+    if (firstImg.complete) {
+      onFirstLoad();
+    } else {
+      firstImg.onload = onFirstLoad;
+    }
+
+    // Preload remaining frames asynchronously
+    for (let i = 1; i < TOTAL_FRAMES; i++) {
+      const img = new Image();
+      img.src = getFrameUrl(i);
+      img.onload = () => {
+        if (Math.round(currentFrameRef.current) === i) {
+          drawFrame(i);
+        }
+      };
+      images[i] = img;
+    }
+
+    window.addEventListener("resize", updateCanvasSize);
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      return () => {
+        window.removeEventListener("resize", updateCanvasSize);
+      };
+    }
+
+    let ctx: gsap.Context | null = null;
+
+    ctx = gsap.context(() => {
+      const frameTarget = { frame: 0 };
+
+      gsap.to(frameTarget, {
+        frame: TOTAL_FRAMES - 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: container,
+          start: "top top",
+          end: "+=150%",
+          scrub: true,
+          pin: true,
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            const targetFrame = self.progress * (TOTAL_FRAMES - 1);
+            requestAnimationFrame(() => drawFrame(targetFrame));
+          },
+        },
+      });
+    }, containerRef);
+
+    return () => {
+      window.removeEventListener("resize", updateCanvasSize);
+      if (ctx) ctx.revert();
+    };
+  }, [drawFrame, updateCanvasSize]);
+
+  // Entrance animations for Hero content
   React.useEffect(() => {
     const ctx = gsap.context(() => {
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -109,29 +235,20 @@ export function Hero() {
       id="hero"
       className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden"
     >
-      {/* Background Video - z-0 */}
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0 motion-reduce:hidden"
-      >
-        <source src="/bg.mp4" type="video/mp4" />
-      </video>
-
-      {/* Subtle Dark Overlay for Text Readability - z-5 */}
-      <div
-        className="absolute inset-0 bg-black/50 dark:bg-black/60 pointer-events-none z-5"
+      {/* Background Frame Sequence Canvas - z-0 */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full pointer-events-none z-0 motion-reduce:hidden"
         aria-hidden="true"
       />
 
-      {/* Hero-Scoped Grid & Ambient Glow - z-10 */}
-      <GridBackground className="z-10" />
+      {/* Subtle Dark Overlay for Text Readability - z-10 */}
+      <div
+        className="absolute inset-0 bg-black/50 dark:bg-black/60 pointer-events-none z-10"
+        aria-hidden="true"
+      />
 
+      {/* Hero Content - z-20 */}
       <div className="container relative z-20 max-w-5xl mx-auto px-4 md:px-6 flex flex-col items-center text-center">
         {/* Badge status */}
         <div
