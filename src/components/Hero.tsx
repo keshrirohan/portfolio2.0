@@ -76,18 +76,23 @@ export function Hero() {
     const imgRatio = imgWidth / imgHeight;
     const canvasRatio = canvasWidth / canvasHeight;
 
+    // Apply ~10% zoom to crop right-bottom watermark completely
+    const zoom = 1.10;
     let drawWidth = canvasWidth;
     let drawHeight = canvasHeight;
-    let offsetX = 0;
-    let offsetY = 0;
 
     if (canvasRatio > imgRatio) {
-      drawHeight = canvasWidth / imgRatio;
-      offsetY = (canvasHeight - drawHeight) / 2;
+      drawHeight = (canvasWidth / imgRatio) * zoom;
+      drawWidth = canvasWidth * zoom;
     } else {
-      drawWidth = canvasHeight * imgRatio;
-      offsetX = (canvasWidth - drawWidth) / 2;
+      drawWidth = (canvasHeight * imgRatio) * zoom;
+      drawHeight = canvasHeight * zoom;
     }
+
+    // Shift image right so the portrait sits on the right half of the hero
+    // and push the bottom-right corner (watermark) outside the canvas bounds
+    let offsetX = (canvasWidth - drawWidth) / 2 + canvasWidth * 0.15;
+    let offsetY = (canvasHeight - drawHeight) / 2 - canvasHeight * 0.05;
 
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
@@ -242,18 +247,24 @@ export function Hero() {
         aria-hidden="true"
       />
 
-      {/* Subtle Dark Overlay for Text Readability - z-10 */}
+      {/* Layered Gradient Overlay - z-10 */}
+      {/* Horizontal: Darker on left (behind content), clear on right (showing face) */}
       <div
-        className="absolute inset-0 bg-black/50 dark:bg-black/60 pointer-events-none z-10"
+        className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none z-10"
+        aria-hidden="true"
+      />
+      {/* Vertical: Subtle vignette top & smooth fade to solid background at bottom */}
+      <div
+        className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background pointer-events-none z-10"
         aria-hidden="true"
       />
 
       {/* Hero Content - z-20 */}
-      <div className="container relative z-20 max-w-5xl mx-auto px-4 md:px-6 flex flex-col items-center text-center">
-        {/* Badge status */}
+      <div className="container relative z-20 max-w-6xl mx-auto px-4 md:px-8 lg:px-12 flex flex-col items-center text-center lg:items-start lg:text-left">
+        {/* Availability status badge */}
         <div
           ref={badgeRef}
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-medium mb-8 backdrop-blur-sm"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary text-xs font-medium mb-6 backdrop-blur-md"
         >
           <Sparkles className="w-3.5 h-3.5" />
           <span>Available for Full Stack Opportunities</span>
@@ -262,7 +273,7 @@ export function Hero() {
         {/* Main Heading */}
         <h1
           ref={headingRef}
-          className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight max-w-4xl leading-[1.1] mb-6"
+          className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight max-w-2xl leading-[1.1] mb-5"
         >
           <span className="text-foreground">Full Stack Developer</span>
         </h1>
@@ -270,7 +281,7 @@ export function Hero() {
         {/* Professional Summary */}
         <p
           ref={descRef}
-          className="text-muted-foreground text-base sm:text-lg md:text-xl max-w-2xl font-normal leading-relaxed mb-8"
+          className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-lg font-normal leading-relaxed mb-6"
         >
           {profile.summary}
         </p>
@@ -278,7 +289,7 @@ export function Hero() {
         {/* Core Stack Badges */}
         <div
           ref={badgesRef}
-          className="flex flex-wrap items-center justify-center gap-2 mb-10 max-w-xl"
+          className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-8 max-w-lg"
         >
           {coreTech.map((tech) => (
             <Badge
@@ -294,7 +305,7 @@ export function Hero() {
         {/* CTA Buttons */}
         <div
           ref={ctaRef}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto mb-16"
+          className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 w-full sm:w-auto mb-10"
         >
           <Link
             href="#projects"
@@ -333,39 +344,39 @@ export function Hero() {
         {/* Developer Terminal Code Snippet Preview */}
         <div
           ref={terminalRef}
-          className="w-full max-w-xl rounded-xl border border-border/80 bg-card/60 backdrop-blur-md p-4 text-left shadow-2xl overflow-hidden font-mono text-xs text-muted-foreground"
+          className="w-full max-w-md rounded-lg border border-border/60 bg-card/40 backdrop-blur-md p-3.5 text-left shadow-lg overflow-hidden font-mono text-[11px] text-muted-foreground/90 opacity-90 hover:opacity-100 transition-opacity"
         >
-          <div className="flex items-center gap-2 mb-3 pb-2 border-b border-border/40">
+          <div className="flex items-center gap-2 mb-2 pb-1.5 border-b border-border/30">
             <div className="flex gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-              <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+              <div className="w-2 h-2 rounded-full bg-red-500/70" />
+              <div className="w-2 h-2 rounded-full bg-amber-500/70" />
+              <div className="w-2 h-2 rounded-full bg-emerald-500/70" />
             </div>
-            <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground/70 ml-2">
+            <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/60 ml-2">
               <TerminalIcon className="w-3 h-3" />
               <span>rohan-keshri.config.ts</span>
             </div>
           </div>
-          <div className="space-y-1 leading-relaxed">
-            <p className="text-primary font-semibold">
+          <div className="space-y-0.5 leading-snug">
+            <p className="text-primary font-medium">
               const developer = &#123;
             </p>
-            <p className="pl-4">
-              name: <span className="text-emerald-400">&quot;Rohan Keshri&quot;</span>,
+            <p className="pl-3">
+              name: <span className="text-emerald-400/90">&quot;Rohan Keshri&quot;</span>,
             </p>
-            <p className="pl-4">
-              role: <span className="text-amber-300">&quot;Full Stack Engineer&quot;</span>,
+            <p className="pl-3">
+              role: <span className="text-amber-300/90">&quot;Full Stack Engineer&quot;</span>,
             </p>
-            <p className="pl-4">
-              leetcodeSolved: <span className="text-sky-300">140</span>,
+            <p className="pl-3">
+              leetcodeSolved: <span className="text-sky-300/90">140</span>,
             </p>
-            <p className="pl-4">
-              githubStreak: <span className="text-purple-300">&quot;100+ Days&quot;</span>,
+            <p className="pl-3">
+              githubStreak: <span className="text-purple-300/90">&quot;100+ Days&quot;</span>,
             </p>
-            <p className="pl-4">
-              status: <span className="text-emerald-400">&quot;Building scalable products&quot;</span>
+            <p className="pl-3">
+              status: <span className="text-emerald-400/90">&quot;Building scalable products&quot;</span>
             </p>
-            <p className="text-primary font-semibold">&#125;;</p>
+            <p className="text-primary font-medium">&#125;;</p>
           </div>
         </div>
       </div>
