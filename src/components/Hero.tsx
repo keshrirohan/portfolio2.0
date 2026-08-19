@@ -1,0 +1,138 @@
+import Link from "next/link";
+import { ArrowRight, Download, Mail, Terminal as TerminalIcon, Sparkles } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { profile } from "@/data/portfolio";
+import { cn } from "@/lib/utils";
+
+export function Hero() {
+  const coreTech = [
+    "React.js",
+    "Next.js",
+    "Node.js",
+    "Express.js",
+    "PostgreSQL",
+    "MongoDB",
+    "TypeScript",
+  ];
+
+  return (
+    <section
+      id="hero"
+      className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden"
+    >
+      {/* Visual Background Elements */}
+      <div className="absolute inset-0 pointer-events-none -z-10">
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+        
+        {/* Ambient gradients */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-primary/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-10 right-10 w-[300px] h-[300px] bg-sky-500/5 rounded-full blur-[100px]" />
+      </div>
+
+      <div className="container max-w-5xl mx-auto px-4 md:px-6 flex flex-col items-center text-center">
+        {/* Badge status */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-medium mb-8 backdrop-blur-sm">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Available for Full Stack Opportunities</span>
+        </div>
+
+        {/* Main Heading */}
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight max-w-4xl leading-[1.1] mb-6">
+          <span className="text-foreground">Full Stack Developer</span>
+        </h1>
+
+        {/* Professional Summary */}
+        <p className="text-muted-foreground text-base sm:text-lg md:text-xl max-w-2xl font-normal leading-relaxed mb-8">
+          {profile.summary}
+        </p>
+
+        {/* Core Stack Badges */}
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-10 max-w-xl">
+          {coreTech.map((tech) => (
+            <Badge
+              key={tech}
+              variant="secondary"
+              className="px-3 py-1 text-xs font-mono font-medium rounded-md border border-border/60 bg-secondary/60 hover:bg-secondary transition-colors"
+            >
+              {tech}
+            </Badge>
+          ))}
+        </div>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto mb-16">
+          <Link
+            href="#projects"
+            className={cn(
+              buttonVariants({ size: "lg" }),
+              "w-full sm:w-auto rounded-full gap-2 px-6 font-semibold shadow-sm"
+            )}
+          >
+            <span>View Projects</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+
+          <Link
+            href="#contact"
+            className={cn(
+              buttonVariants({ size: "lg", variant: "outline" }),
+              "w-full sm:w-auto rounded-full gap-2 px-6 font-semibold"
+            )}
+          >
+            <Mail className="w-4 h-4" />
+            <span>Contact Me</span>
+          </Link>
+
+          <a
+            href="#contact"
+            className={cn(
+              buttonVariants({ size: "lg", variant: "ghost" }),
+              "w-full sm:w-auto rounded-full gap-2 px-6 font-medium text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Download className="w-4 h-4" />
+            <span>Resume</span>
+          </a>
+        </div>
+
+        {/* Developer Terminal Code Snippet Preview */}
+        <div className="w-full max-w-xl rounded-xl border border-border/80 bg-card/60 backdrop-blur-md p-4 text-left shadow-2xl overflow-hidden font-mono text-xs text-muted-foreground">
+          <div className="flex items-center gap-2 mb-3 pb-2 border-b border-border/40">
+            <div className="flex gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+              <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+            </div>
+            <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground/70 ml-2">
+              <TerminalIcon className="w-3 h-3" />
+              <span>rohan-keshri.config.ts</span>
+            </div>
+          </div>
+          <div className="space-y-1 leading-relaxed">
+            <p className="text-primary font-semibold">
+              const developer = &#123;
+            </p>
+            <p className="pl-4">
+              name: <span className="text-emerald-400">&quot;Rohan Keshri&quot;</span>,
+            </p>
+            <p className="pl-4">
+              role: <span className="text-amber-300">&quot;Full Stack Engineer&quot;</span>,
+            </p>
+            <p className="pl-4">
+              leetcodeSolved: <span className="text-sky-300">140</span>,
+            </p>
+            <p className="pl-4">
+              githubStreak: <span className="text-purple-300">&quot;100+ Days&quot;</span>,
+            </p>
+            <p className="pl-4">
+              status: <span className="text-emerald-400">&quot;Building scalable products&quot;</span>
+            </p>
+            <p className="text-primary font-semibold">&#125;;</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

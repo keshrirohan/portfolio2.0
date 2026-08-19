@@ -1,12 +1,31 @@
+import { Navbar } from "@/components/Navbar";
+import { Hero } from "@/components/Hero";
+import { About } from "@/components/About";
+import { Skills } from "@/components/Skills";
+import { Experience } from "@/components/Experience";
+import { Projects } from "@/components/Projects";
+import { Achievements } from "@/components/Achievements";
+import { Education } from "@/components/Education";
+import { Certification } from "@/components/Certification";
+import { Contact } from "@/components/Contact";
+import { Footer } from "@/components/Footer";
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-6 text-center">
-      <div className="max-w-md space-y-4">
-        <h1 className="text-3xl font-bold tracking-tight">Portfolio Foundation</h1>
-        <p className="text-muted-foreground text-sm">
-          Next.js App Router foundation initialized with TypeScript, Tailwind CSS, shadcn/ui, and GSAP.
-        </p>
-      </div>
-    </main>
+    <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary selection:text-primary-foreground">
+      <Navbar />
+      <main className="flex-1">
+        <Hero />
+        <About />
+        <Skills />
+        <Experience />
+        <Projects />
+        <Achievements />
+        <Education />
+        <Certification />
+        <Contact />
+      </main>
+      <Footer />
+    </div>
   );
 }

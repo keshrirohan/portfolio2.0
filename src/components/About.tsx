@@ -1,0 +1,84 @@
+import { Code2, Flame, GitCommit, GraduationCap, Trophy, MapPin, Briefcase } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { profile } from "@/data/portfolio";
+
+export function About() {
+  const statIcons: Record<string, React.ElementType> = {
+    Code2,
+    Flame,
+    GitCommit,
+    Trophy,
+    GraduationCap,
+  };
+
+  return (
+    <section id="about" className="py-24 border-t border-border/40 relative">
+      <div className="container max-w-6xl mx-auto px-4 md:px-6">
+        {/* Section Header */}
+        <div className="flex flex-col items-start mb-14">
+          <Badge variant="outline" className="mb-3 px-3 py-1 text-xs font-mono tracking-wider uppercase">
+            About Me
+          </Badge>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+            Engineering with Precision & Impact
+          </h2>
+        </div>
+
+        {/* Two-Column Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          {/* Left Column: Story / Bio */}
+          <div className="lg:col-span-7 space-y-6 text-muted-foreground text-base leading-relaxed">
+            <p>
+              I am a <strong className="text-foreground font-semibold">Full Stack Developer</strong> and Computer Science Engineering student dedicated to building high-performance web applications with modular software design.
+            </p>
+            <p>
+              My expertise spans the modern web stack—from architecting frontend interfaces in <span className="text-foreground font-medium">React and Next.js</span> to engineering robust REST APIs and database layers with <span className="text-foreground font-medium">Node.js, Express, PostgreSQL, and MongoDB</span>.
+            </p>
+            <p>
+              I take pride in solving non-trivial problems, whether automating developer workflows with Chrome Extensions, engineering voice-driven AI platforms, or analyzing real-time pose tracking algorithms.
+            </p>
+
+            <div className="pt-4 flex flex-wrap items-center gap-6 text-sm text-foreground/80">
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-primary" />
+                <span>{profile.location}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Briefcase className="w-4 h-4 text-primary" />
+                <span>{profile.relocation}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Statistics Grid */}
+          <div className="lg:col-span-5 grid grid-cols-2 gap-4">
+            {profile.metrics.map((metric) => {
+              const IconComponent = statIcons[metric.icon] || Code2;
+              return (
+                <Card
+                  key={metric.label}
+                  className="bg-card/40 backdrop-blur-sm border-border/60 hover:border-primary/40 transition-all duration-300 group"
+                >
+                  <CardContent className="p-5 flex flex-col justify-between h-full space-y-3">
+                    <div className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                      <IconComponent className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-2xl font-extrabold text-foreground tracking-tight">
+                        {metric.value}
+                      </div>
+                      <div className="text-xs font-medium text-muted-foreground mt-0.5">
+                        {metric.label}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
