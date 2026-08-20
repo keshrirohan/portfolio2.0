@@ -16,12 +16,44 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { projects, Project } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
+import { gsap } from "@/lib/gsap";
 
 export function Projects() {
+  const containerRef = React.useRef<HTMLElement>(null);
+  const gridRef = React.useRef<HTMLDivElement>(null);
   const [selectedProject, setSelectedProject] = React.useState<Project | null>(null);
 
+  React.useEffect(() => {
+    const ctx = gsap.context(() => {
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) return;
+
+      if (gridRef.current) {
+        const cards = gridRef.current.children;
+        gsap.fromTo(
+          cards,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            stagger: 0.12,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: gridRef.current,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="projects" className="py-24 border-t border-border/40 bg-secondary/10">
+    <section ref={containerRef} id="projects" className="py-24 border-t border-border/40 bg-secondary/10">
       <div className="container max-w-6xl mx-auto px-4 md:px-6">
         {/* Section Header */}
         <div className="flex flex-col items-start mb-16">
@@ -37,17 +69,17 @@ export function Projects() {
         </div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div ref={gridRef} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {projects.map((project) => (
             <Card
               key={project.id}
-              className="bg-card/50 backdrop-blur-sm border-border/60 hover:border-primary/40 transition-all duration-300 flex flex-col justify-between group overflow-hidden"
+              className="bg-card/50 backdrop-blur-sm border-border/60 hover:border-primary/40 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group overflow-hidden hover:shadow-xl"
             >
               <div>
                 {/* Header Accent & Category */}
                 <CardHeader className="pb-4">
                   <div className="flex items-center justify-between gap-2 mb-2">
-                    <Badge variant="secondary" className="text-[11px] font-mono font-medium px-2.5 py-0.5 bg-primary/10 text-primary border border-primary/20">
+                    <Badge variant="secondary" className="text-[11px] font-mono font-medium px-2.5 py-0.5 bg-primary/10 text-primary border border-primary/20 group-hover:bg-primary/20 transition-colors">
                       {project.category}
                     </Badge>
                     {project.featured && (
@@ -97,7 +129,7 @@ export function Projects() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setSelectedProject(project)}
-                  className="gap-1.5 text-xs font-semibold hover:text-primary p-0 h-auto"
+                  className="gap-1.5 text-xs font-semibold hover:text-primary p-0 h-auto focus-visible:ring-2 focus-visible:ring-primary"
                 >
                   <Info className="w-3.5 h-3.5" />
                   <span>View Details</span>
@@ -112,7 +144,7 @@ export function Projects() {
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label={`GitHub repository for ${project.title}`}
-                          className={buttonVariants({ variant: "outline", size: "icon", className: "w-8 h-8 rounded-full" })}
+                          className={buttonVariants({ variant: "outline", size: "icon", className: "w-8 h-8 rounded-full focus-visible:ring-2 focus-visible:ring-primary" })}
                         >
                           <GithubIcon className="w-3.5 h-3.5" />
                         </a>
@@ -130,7 +162,7 @@ export function Projects() {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label={`Live demo for ${project.title}`}
-                            className={buttonVariants({ size: "icon", className: "w-8 h-8 rounded-full" })}
+                            className={buttonVariants({ size: "icon", className: "w-8 h-8 rounded-full focus-visible:ring-2 focus-visible:ring-primary" })}
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                           </a>
@@ -217,7 +249,7 @@ export function Projects() {
                   href={selectedProject.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={cn(buttonVariants({ variant: "outline", size: "sm" }), "rounded-full gap-2")}
+                  className={cn(buttonVariants({ variant: "outline", size: "sm" }), "rounded-full gap-2 focus-visible:ring-2 focus-visible:ring-primary")}
                 >
                   <GithubIcon className="w-4 h-4" />
                   <span>View Repository</span>
@@ -227,7 +259,7 @@ export function Projects() {
                     href={selectedProject.live}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={cn(buttonVariants({ size: "sm" }), "rounded-full gap-2")}
+                    className={cn(buttonVariants({ size: "sm" }), "rounded-full gap-2 focus-visible:ring-2 focus-visible:ring-primary")}
                   >
                     <ExternalLink className="w-4 h-4" />
                     <span>Live Demo</span>

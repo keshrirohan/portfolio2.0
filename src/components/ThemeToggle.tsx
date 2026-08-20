@@ -6,13 +6,15 @@ import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
+const emptySubscribe = () => () => {};
+
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = React.useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
   if (!mounted) {
     return (
@@ -29,7 +31,7 @@ export function ThemeToggle() {
           <Button
             variant="ghost"
             size="icon"
-            className="w-9 h-9 rounded-full hover:bg-accent/80 transition-colors"
+            className="w-9 h-9 rounded-full hover:bg-accent/80 transition-colors focus-visible:ring-2 focus-visible:ring-primary"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             aria-label="Toggle theme"
           >

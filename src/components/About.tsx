@@ -1,9 +1,17 @@
+"use client";
+
+import * as React from "react";
 import { Code2, Flame, GitCommit, GraduationCap, Trophy, MapPin, Briefcase } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { profile } from "@/data/portfolio";
+import { gsap } from "@/lib/gsap";
 
 export function About() {
+  const containerRef = React.useRef<HTMLElement>(null);
+  const leftColRef = React.useRef<HTMLDivElement>(null);
+  const rightColRef = React.useRef<HTMLDivElement>(null);
+
   const statIcons: Record<string, React.ElementType> = {
     Code2,
     Flame,
@@ -12,8 +20,53 @@ export function About() {
     GraduationCap,
   };
 
+  React.useEffect(() => {
+    const ctx = gsap.context(() => {
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) return;
+
+      gsap.fromTo(
+        leftColRef.current,
+        { opacity: 0, x: -20 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.7,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: leftColRef.current,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+
+      if (rightColRef.current) {
+        const cards = rightColRef.current.children;
+        gsap.fromTo(
+          cards,
+          { opacity: 0, y: 25 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: rightColRef.current,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="about" className="py-24 border-t border-border/40 relative">
+    <section ref={containerRef} id="about" className="py-24 border-t border-border/40 relative">
       <div className="container max-w-6xl mx-auto px-4 md:px-6">
         {/* Section Header */}
         <div className="flex flex-col items-start mb-14">
@@ -28,7 +81,7 @@ export function About() {
         {/* Two-Column Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* Left Column: Story / Bio */}
-          <div className="lg:col-span-7 space-y-6 text-muted-foreground text-base leading-relaxed">
+          <div ref={leftColRef} className="lg:col-span-7 space-y-6 text-muted-foreground text-base leading-relaxed">
             <p>
               I am a <strong className="text-foreground font-semibold">Full Stack Developer</strong> and Computer Science Engineering student dedicated to building high-performance web applications with modular software design.
             </p>
@@ -52,13 +105,13 @@ export function About() {
           </div>
 
           {/* Right Column: Statistics Grid */}
-          <div className="lg:col-span-5 grid grid-cols-2 gap-4">
+          <div ref={rightColRef} className="lg:col-span-5 grid grid-cols-2 gap-4">
             {profile.metrics.map((metric) => {
               const IconComponent = statIcons[metric.icon] || Code2;
               return (
                 <Card
                   key={metric.label}
-                  className="bg-card/40 backdrop-blur-sm border-border/60 hover:border-primary/40 transition-all duration-300 group"
+                  className="bg-card/40 backdrop-blur-sm border-border/60 hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 group"
                 >
                   <CardContent className="p-5 flex flex-col justify-between h-full space-y-3">
                     <div className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">

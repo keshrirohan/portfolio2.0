@@ -1,11 +1,46 @@
+"use client";
+
+import * as React from "react";
 import { GraduationCap, Calendar, CheckCircle2, Award } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { education } from "@/data/portfolio";
+import { gsap } from "@/lib/gsap";
 
 export function Education() {
+  const containerRef = React.useRef<HTMLElement>(null);
+  const contentRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const ctx = gsap.context(() => {
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) return;
+
+      if (contentRef.current) {
+        gsap.fromTo(
+          contentRef.current.children,
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: contentRef.current,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="education" className="py-24 border-t border-border/40 bg-secondary/20">
+    <section ref={containerRef} id="education" className="py-24 border-t border-border/40 bg-secondary/20">
       <div className="container max-w-5xl mx-auto px-4 md:px-6">
         {/* Section Header */}
         <div className="flex flex-col items-start mb-16">
@@ -21,20 +56,20 @@ export function Education() {
         </div>
 
         {/* Education List */}
-        <div className="space-y-6">
+        <div ref={contentRef} className="space-y-6">
           {education.map((item) => (
             <Card
               key={item.id}
-              className="bg-card/50 backdrop-blur-sm border-border/60 hover:border-primary/40 transition-all duration-300"
+              className="bg-card/50 backdrop-blur-sm border-border/60 hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 group"
             >
               <CardHeader className="pb-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-start gap-4">
-                    <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0 mt-0.5">
+                    <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform shrink-0 mt-0.5">
                       <GraduationCap className="w-6 h-6" />
                     </div>
                     <div>
-                      <CardTitle className="text-xl font-bold text-foreground">
+                      <CardTitle className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                         {item.degree} — {item.field}
                       </CardTitle>
                       <CardDescription className="text-base font-semibold text-primary mt-1">
