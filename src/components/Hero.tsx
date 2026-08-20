@@ -67,34 +67,33 @@ export function Hero() {
 
     if (!img || !img.complete || img.naturalWidth === 0) return;
 
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
+    // Use CSS pixel dimensions for full-screen cover mapping
+    const canvasWidth = canvas.offsetWidth || canvas.width;
+    const canvasHeight = canvas.offsetHeight || canvas.height;
     if (canvasWidth === 0 || canvasHeight === 0) return;
 
     const imgWidth = img.naturalWidth;
     const imgHeight = img.naturalHeight;
-    const imgRatio = imgWidth / imgHeight;
-    const canvasRatio = canvasWidth / canvasHeight;
 
-    // Apply ~10% zoom to crop right-bottom watermark completely
-    const zoom = 1.10;
-    let drawWidth = canvasWidth;
-    let drawHeight = canvasHeight;
+    // Full-Screen COVER Scale: max(canvasWidth / imgWidth, canvasHeight / imgHeight)
+    const scaleX = canvasWidth / imgWidth;
+    const scaleY = canvasHeight / imgHeight;
+    const scale = Math.max(scaleX, scaleY);
 
-    if (canvasRatio > imgRatio) {
-      drawHeight = (canvasWidth / imgRatio) * zoom;
-      drawWidth = canvasWidth * zoom;
-    } else {
-      drawWidth = (canvasHeight * imgRatio) * zoom;
-      drawHeight = canvasHeight * zoom;
-    }
+    const drawWidth = imgWidth * scale;
+    const drawHeight = imgHeight * scale;
 
-    // Shift image right so the portrait sits on the right half of the hero
-    // and push the bottom-right corner (watermark) outside the canvas bounds
-    let offsetX = (canvasWidth - drawWidth) / 2 + canvasWidth * 0.15;
-    let offsetY = (canvasHeight - drawHeight) / 2 - canvasHeight * 0.05;
+    // Right-align frame so portrait is positioned on the right side of the canvas
+    const offsetX = canvasWidth - drawWidth;
 
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    // Align vertically with slight top bias to preserve top of head
+    let offsetY = (canvasHeight - drawHeight) * 0.20;
+
+    // Clamp vertical offset so frame covers canvas height completely
+    if (offsetY > 0) offsetY = 0;
+    if (offsetY + drawHeight < canvasHeight) offsetY = canvasHeight - drawHeight;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
   }, []);
 
@@ -108,6 +107,11 @@ export function Hero() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = width * dpr;
     canvas.height = height * dpr;
+
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.scale(dpr, dpr);
+    }
 
     drawFrame(currentFrameRef.current);
   }, [drawFrame]);
@@ -238,145 +242,147 @@ export function Hero() {
     <section
       ref={containerRef}
       id="hero"
-      className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden"
+      className="relative min-h-[92vh] flex items-center pt-28 pb-16 overflow-hidden bg-background"
     >
-      {/* Background Frame Sequence Canvas - z-0 */}
+      {/* Background Frame Sequence Canvas (Full-Screen Cover) - z-0 */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full pointer-events-none z-0 motion-reduce:hidden"
         aria-hidden="true"
       />
 
-      {/* Layered Gradient Overlay - z-10 */}
-      {/* Horizontal: Darker on left (behind content), clear on right (showing face) */}
+      {/* Cinematic Dark Gradient Overlays - z-10 */}
+      {/* Horizontal: Darker background on left for text contrast, fading smoothly to transparent on right for portrait */}
       <div
-        className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none z-10"
+        className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-transparent pointer-events-none z-10"
         aria-hidden="true"
       />
-      {/* Vertical: Subtle vignette top & smooth fade to solid background at bottom */}
+      {/* Vertical: Top vignette & bottom fade into next section */}
       <div
         className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background pointer-events-none z-10"
         aria-hidden="true"
       />
 
       {/* Hero Content - z-20 */}
-      <div className="container relative z-20 max-w-6xl mx-auto px-4 md:px-8 lg:px-12 flex flex-col items-center text-center lg:items-start lg:text-left">
-        {/* Availability status badge */}
-        <div
-          ref={badgeRef}
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary text-xs font-medium mb-6 backdrop-blur-md"
-        >
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Available for Full Stack Opportunities</span>
-        </div>
-
-        {/* Main Heading */}
-        <h1
-          ref={headingRef}
-          className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight max-w-2xl leading-[1.1] mb-5"
-        >
-          <span className="text-foreground">Full Stack Developer</span>
-        </h1>
-
-        {/* Professional Summary */}
-        <p
-          ref={descRef}
-          className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-lg font-normal leading-relaxed mb-6"
-        >
-          {profile.summary}
-        </p>
-
-        {/* Core Stack Badges */}
-        <div
-          ref={badgesRef}
-          className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-8 max-w-lg"
-        >
-          {coreTech.map((tech) => (
-            <Badge
-              key={tech}
-              variant="secondary"
-              className="px-3 py-1 text-xs font-mono font-medium rounded-md border border-border/60 bg-secondary/60 hover:bg-secondary transition-colors"
-            >
-              {tech}
-            </Badge>
-          ))}
-        </div>
-
-        {/* CTA Buttons */}
-        <div
-          ref={ctaRef}
-          className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 w-full sm:w-auto mb-10"
-        >
-          <Link
-            href="#projects"
-            className={cn(
-              buttonVariants({ size: "lg" }),
-              "w-full sm:w-auto rounded-full gap-2 px-6 font-semibold shadow-sm focus-visible:ring-2 focus-visible:ring-primary"
-            )}
+      <div className="container relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex flex-col items-center text-center lg:items-start lg:text-left">
+        <div className="w-full lg:max-w-[55%] flex flex-col items-center text-center lg:items-start lg:text-left">
+          {/* Availability status badge */}
+          <div
+            ref={badgeRef}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary text-xs font-medium mb-6 backdrop-blur-md"
           >
-            <span>View Projects</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-
-          <Link
-            href="#contact"
-            className={cn(
-              buttonVariants({ size: "lg", variant: "outline" }),
-              "w-full sm:w-auto rounded-full gap-2 px-6 font-semibold focus-visible:ring-2 focus-visible:ring-primary"
-            )}
-          >
-            <Mail className="w-4 h-4" />
-            <span>Contact Me</span>
-          </Link>
-
-          <a
-            href="#contact"
-            className={cn(
-              buttonVariants({ size: "lg", variant: "ghost" }),
-              "w-full sm:w-auto rounded-full gap-2 px-6 font-medium text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
-            )}
-          >
-            <Download className="w-4 h-4" />
-            <span>Resume</span>
-          </a>
-        </div>
-
-        {/* Developer Terminal Code Snippet Preview */}
-        <div
-          ref={terminalRef}
-          className="w-full max-w-md rounded-lg border border-border/60 bg-card/40 backdrop-blur-md p-3.5 text-left shadow-lg overflow-hidden font-mono text-[11px] text-muted-foreground/90 opacity-90 hover:opacity-100 transition-opacity"
-        >
-          <div className="flex items-center gap-2 mb-2 pb-1.5 border-b border-border/30">
-            <div className="flex gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-red-500/70" />
-              <div className="w-2 h-2 rounded-full bg-amber-500/70" />
-              <div className="w-2 h-2 rounded-full bg-emerald-500/70" />
-            </div>
-            <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/60 ml-2">
-              <TerminalIcon className="w-3 h-3" />
-              <span>rohan-keshri.config.ts</span>
-            </div>
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Available for Full Stack Opportunities</span>
           </div>
-          <div className="space-y-0.5 leading-snug">
-            <p className="text-primary font-medium">
-              const developer = &#123;
-            </p>
-            <p className="pl-3">
-              name: <span className="text-emerald-400/90">&quot;Rohan Keshri&quot;</span>,
-            </p>
-            <p className="pl-3">
-              role: <span className="text-amber-300/90">&quot;Full Stack Engineer&quot;</span>,
-            </p>
-            <p className="pl-3">
-              leetcodeSolved: <span className="text-sky-300/90">140</span>,
-            </p>
-            <p className="pl-3">
-              githubStreak: <span className="text-purple-300/90">&quot;100+ Days&quot;</span>,
-            </p>
-            <p className="pl-3">
-              status: <span className="text-emerald-400/90">&quot;Building scalable products&quot;</span>
-            </p>
-            <p className="text-primary font-medium">&#125;;</p>
+
+          {/* Main Heading */}
+          <h1
+            ref={headingRef}
+            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-5 text-foreground"
+          >
+            Full Stack Developer
+          </h1>
+
+          {/* Professional Summary */}
+          <p
+            ref={descRef}
+            className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-xl font-normal leading-relaxed mb-6"
+          >
+            {profile.summary}
+          </p>
+
+          {/* Core Stack Badges */}
+          <div
+            ref={badgesRef}
+            className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-8 max-w-xl"
+          >
+            {coreTech.map((tech) => (
+              <Badge
+                key={tech}
+                variant="secondary"
+                className="px-3 py-1 text-xs font-mono font-medium rounded-md border border-border/60 bg-secondary/60 hover:bg-secondary transition-colors"
+              >
+                {tech}
+              </Badge>
+            ))}
+          </div>
+
+          {/* CTA Buttons */}
+          <div
+            ref={ctaRef}
+            className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 w-full sm:w-auto mb-8"
+          >
+            <Link
+              href="#projects"
+              className={cn(
+                buttonVariants({ size: "lg" }),
+                "w-full sm:w-auto rounded-full gap-2 px-6 font-semibold shadow-sm focus-visible:ring-2 focus-visible:ring-primary"
+              )}
+            >
+              <span>View Projects</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+
+            <Link
+              href="#contact"
+              className={cn(
+                buttonVariants({ size: "lg", variant: "outline" }),
+                "w-full sm:w-auto rounded-full gap-2 px-6 font-semibold focus-visible:ring-2 focus-visible:ring-primary"
+              )}
+            >
+              <Mail className="w-4 h-4" />
+              <span>Contact Me</span>
+            </Link>
+
+            <a
+              href="#contact"
+              className={cn(
+                buttonVariants({ size: "lg", variant: "ghost" }),
+                "w-full sm:w-auto rounded-full gap-2 px-6 font-medium text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+              )}
+            >
+              <Download className="w-4 h-4" />
+              <span>Resume</span>
+            </a>
+          </div>
+
+          {/* Developer Terminal Code Snippet Preview */}
+          <div
+            ref={terminalRef}
+            className="w-full max-w-md rounded-lg border border-border/60 bg-card/40 backdrop-blur-md p-3.5 text-left shadow-lg overflow-hidden font-mono text-[11px] text-muted-foreground/90 opacity-90 hover:opacity-100 transition-opacity"
+          >
+            <div className="flex items-center gap-2 mb-2 pb-1.5 border-b border-border/30">
+              <div className="flex gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-red-500/70" />
+                <div className="w-2 h-2 rounded-full bg-amber-500/70" />
+                <div className="w-2 h-2 rounded-full bg-emerald-500/70" />
+              </div>
+              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/60 ml-2">
+                <TerminalIcon className="w-3 h-3" />
+                <span>rohan-keshri.config.ts</span>
+              </div>
+            </div>
+            <div className="space-y-0.5 leading-snug">
+              <p className="text-primary font-medium">
+                const developer = &#123;
+              </p>
+              <p className="pl-3">
+                name: <span className="text-emerald-400/90">&quot;Rohan Keshri&quot;</span>,
+              </p>
+              <p className="pl-3">
+                role: <span className="text-amber-300/90">&quot;Full Stack Engineer&quot;</span>,
+              </p>
+              <p className="pl-3">
+                leetcodeSolved: <span className="text-sky-300/90">140</span>,
+              </p>
+              <p className="pl-3">
+                githubStreak: <span className="text-purple-300/90">&quot;100+ Days&quot;</span>,
+              </p>
+              <p className="pl-3">
+                status: <span className="text-emerald-400/90">&quot;Building scalable products&quot;</span>
+              </p>
+              <p className="text-primary font-medium">&#125;;</p>
+            </div>
           </div>
         </div>
       </div>
