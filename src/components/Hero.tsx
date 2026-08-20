@@ -67,7 +67,7 @@ export function Hero() {
 
     if (!img || !img.complete || img.naturalWidth === 0) return;
 
-    // Use CSS pixel dimensions for full-screen cover mapping
+    // Use CSS pixel dimensions for layout calculations
     const canvasWidth = canvas.offsetWidth || canvas.width;
     const canvasHeight = canvas.offsetHeight || canvas.height;
     if (canvasWidth === 0 || canvasHeight === 0) return;
@@ -75,7 +75,10 @@ export function Hero() {
     const imgWidth = img.naturalWidth;
     const imgHeight = img.naturalHeight;
 
-    // Full-Screen COVER Scale: max(canvasWidth / imgWidth, canvasHeight / imgHeight)
+    const isDesktop = canvasWidth >= 1024;
+    const isTablet = canvasWidth >= 768 && canvasWidth < 1024;
+
+    // Full-Screen COVER Scale
     const scaleX = canvasWidth / imgWidth;
     const scaleY = canvasHeight / imgHeight;
     const scale = Math.max(scaleX, scaleY);
@@ -83,14 +86,21 @@ export function Hero() {
     const drawWidth = imgWidth * scale;
     const drawHeight = imgHeight * scale;
 
-    // Right-align frame so portrait is positioned on the right side of the canvas
-    const offsetX = canvasWidth - drawWidth;
+    // Face center in source frame is located at ~45% of image width
+    const faceImageX = imgWidth * 0.45;
+    const faceScaledX = faceImageX * scale;
 
-    // Align vertically with slight top bias to preserve top of head
-    let offsetY = (canvasHeight - drawHeight) * 0.20;
+    // Position face center at 68% of Hero canvas width on desktop (65% on tablet)
+    const targetFaceCanvasX = isDesktop
+      ? canvasWidth * 0.68
+      : isTablet
+      ? canvasWidth * 0.65
+      : canvasWidth * 0.50;
 
-    // Clamp vertical offset so frame covers canvas height completely
-    if (offsetY > 0) offsetY = 0;
+    const offsetX = targetFaceCanvasX - faceScaledX;
+
+    // Vertical positioning: center vertically with top bias to preserve top of head
+    let offsetY = (canvasHeight - drawHeight) * 0.25;
     if (offsetY + drawHeight < canvasHeight) offsetY = canvasHeight - drawHeight;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -124,14 +134,15 @@ export function Hero() {
     const images: HTMLImageElement[] = new Array(TOTAL_FRAMES);
     imagesRef.current = images;
 
-    // Load first frame immediately
+    // Load initial frame (TOTAL_FRAMES - 1) immediately for reversed playback
+    const initialIndex = TOTAL_FRAMES - 1;
     const firstImg = new Image();
-    firstImg.src = getFrameUrl(0);
-    images[0] = firstImg;
+    firstImg.src = getFrameUrl(initialIndex);
+    images[initialIndex] = firstImg;
 
     const onFirstLoad = () => {
       updateCanvasSize();
-      drawFrame(0);
+      drawFrame(initialIndex);
     };
 
     if (firstImg.complete) {
@@ -141,7 +152,8 @@ export function Hero() {
     }
 
     // Preload remaining frames asynchronously
-    for (let i = 1; i < TOTAL_FRAMES; i++) {
+    for (let i = 0; i < TOTAL_FRAMES; i++) {
+      if (i === initialIndex) continue;
       const img = new Image();
       img.src = getFrameUrl(i);
       img.onload = () => {
@@ -164,10 +176,10 @@ export function Hero() {
     let ctx: gsap.Context | null = null;
 
     ctx = gsap.context(() => {
-      const frameTarget = { frame: 0 };
+      const frameTarget = { frame: TOTAL_FRAMES - 1 };
 
       gsap.to(frameTarget, {
-        frame: TOTAL_FRAMES - 1,
+        frame: 0,
         ease: "none",
         scrollTrigger: {
           trigger: container,
@@ -177,7 +189,7 @@ export function Hero() {
           pin: true,
           anticipatePin: 1,
           onUpdate: (self) => {
-            const targetFrame = self.progress * (TOTAL_FRAMES - 1);
+            const targetFrame = (1 - self.progress) * (TOTAL_FRAMES - 1);
             requestAnimationFrame(() => drawFrame(targetFrame));
           },
         },
@@ -251,25 +263,26 @@ export function Hero() {
         aria-hidden="true"
       />
 
-      {/* Cinematic Dark Gradient Overlays - z-10 */}
-      {/* Horizontal: Darker background on left for text contrast, fading smoothly to transparent on right for portrait */}
+      {/* Dark Gradient Overlay - z-10 */}
+      {/* Solid dark on left 0-45% for text readability, transitioning smoothly to transparent over right portrait zone */}
       <div
-        className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-transparent pointer-events-none z-10"
+        className="absolute inset-0 bg-gradient-to-r from-background via-background/90 via-48% to-transparent pointer-events-none z-10"
         aria-hidden="true"
       />
-      {/* Vertical: Top vignette & bottom fade into next section */}
+      {/* Subtle top vignette & bottom section fade */}
       <div
         className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background pointer-events-none z-10"
         aria-hidden="true"
       />
 
-      {/* Hero Content - z-20 */}
-      <div className="container relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex flex-col items-center text-center lg:items-start lg:text-left">
-        <div className="w-full lg:max-w-[55%] flex flex-col items-center text-center lg:items-start lg:text-left">
+      {/* Hero Content Container - z-20 */}
+      <div className="container relative z-20 max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16 xl:px-20 flex items-center">
+        {/* Left Zone: Restricted to ~42% width on desktop to prevent any face overlap */}
+        <div className="w-full lg:w-[44%] xl:w-[40%] max-w-[620px] flex flex-col items-center text-center lg:items-start lg:text-left">
           {/* Availability status badge */}
           <div
             ref={badgeRef}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary text-xs font-medium mb-6 backdrop-blur-md"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary text-xs font-medium mb-5 backdrop-blur-md"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>Available for Full Stack Opportunities</span>
@@ -278,7 +291,7 @@ export function Hero() {
           {/* Main Heading */}
           <h1
             ref={headingRef}
-            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-5 text-foreground"
+            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-5 text-foreground max-w-[580px]"
           >
             Full Stack Developer
           </h1>
@@ -286,7 +299,7 @@ export function Hero() {
           {/* Professional Summary */}
           <p
             ref={descRef}
-            className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-xl font-normal leading-relaxed mb-6"
+            className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-[560px] font-normal leading-relaxed mb-6"
           >
             {profile.summary}
           </p>
@@ -294,7 +307,7 @@ export function Hero() {
           {/* Core Stack Badges */}
           <div
             ref={badgesRef}
-            className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-8 max-w-xl"
+            className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-8 max-w-[560px]"
           >
             {coreTech.map((tech) => (
               <Badge
@@ -310,7 +323,7 @@ export function Hero() {
           {/* CTA Buttons */}
           <div
             ref={ctaRef}
-            className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 w-full sm:w-auto mb-8"
+            className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 w-full sm:w-auto mb-8 max-w-[560px]"
           >
             <Link
               href="#projects"
@@ -349,7 +362,7 @@ export function Hero() {
           {/* Developer Terminal Code Snippet Preview */}
           <div
             ref={terminalRef}
-            className="w-full max-w-md rounded-lg border border-border/60 bg-card/40 backdrop-blur-md p-3.5 text-left shadow-lg overflow-hidden font-mono text-[11px] text-muted-foreground/90 opacity-90 hover:opacity-100 transition-opacity"
+            className="w-full max-w-[500px] rounded-lg border border-border/60 bg-card/50 backdrop-blur-md p-3.5 text-left shadow-lg overflow-hidden font-mono text-[11px] text-muted-foreground/90 opacity-90 hover:opacity-100 transition-opacity"
           >
             <div className="flex items-center gap-2 mb-2 pb-1.5 border-b border-border/30">
               <div className="flex gap-1.5">
