@@ -68,7 +68,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${jetbrainsMono.variable} scroll-smooth`}
     >
-      <body className="min-h-screen bg-background text-foreground antialiased font-sans overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+      <body className="min-h-screen bg-background text-foreground antialiased font-sans overflow-x-hidden selection:bg-primary/20 selection:text-primary relative">
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
