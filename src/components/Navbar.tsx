@@ -101,7 +101,7 @@ export function Navbar() {
             <TooltipContent>LinkedIn Profile</TooltipContent>
           </Tooltip>
 
-          <
+          <a
             href="#contact"
             className={buttonVariants({ size: "sm", className: "rounded-full gap-1.5 font-medium ml-1" })}
           >
