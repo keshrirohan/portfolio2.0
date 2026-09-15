@@ -7,7 +7,6 @@ import { GithubIcon, LinkedinIcon } from "@/components/icons";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { profile } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
 
@@ -102,9 +101,7 @@ export function Navbar() {
             <TooltipContent>LinkedIn Profile</TooltipContent>
           </Tooltip>
 
-          <ThemeToggle />
-
-          <a
+          <
             href="#contact"
             className={buttonVariants({ size: "sm", className: "rounded-full gap-1.5 font-medium ml-1" })}
           >
@@ -115,7 +112,6 @@ export function Navbar() {
 
         {/* Mobile Actions & Trigger */}
         <div className="flex md:hidden items-center gap-2">
-          <ThemeToggle />
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger
               render={
