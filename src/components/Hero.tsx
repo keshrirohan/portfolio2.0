@@ -303,7 +303,7 @@ export function Hero() {
             ref={headingRef}
             className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.1] mb-3 sm:mb-5 text-foreground max-w-[580px]"
           >
-            Full Stack Developer building practical web apps, AI products, and developer tools.
+            Full Stack Developer.
           </h1>
 
           {/* Professional Summary */}
