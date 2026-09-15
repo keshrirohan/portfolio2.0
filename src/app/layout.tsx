@@ -18,9 +18,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Rohan Keshri — Full Stack Developer & Software Engineer",
+  title: "Rohan Keshri — Full Stack Developer",
   description:
-    "Full Stack Developer focused on building performant, scalable web applications with React, Next.js, Node.js, Express, PostgreSQL, and MongoDB. 140+ LeetCode solved & 100+ day GitHub streak.",
+    "Full Stack Developer building practical web applications, AI products, and developer tools. Experienced with React.js, Node.js, Express.js, PostgreSQL, MongoDB, and TypeScript. Based in Bareilly, India.",
   keywords: [
     "Rohan Keshri",
     "Full Stack Developer",
@@ -32,23 +32,28 @@ export const metadata: Metadata = {
     "Express",
     "PostgreSQL",
     "MongoDB",
+    "AI Developer",
+    "Developer Tools",
+    "Chrome Extension",
+    "Bareilly",
+    "India",
   ],
-  authors: [{ name: "Rohan Keshri", url: "https://github.com/keshrirohan" }],
+  authors: [{ name: "Rohan Keshri", url: "https://rohankeshri.dev/" }],
   creator: "Rohan Keshri",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://github.com/keshrirohan",
+    url: "https://rohankeshri.dev/",
     title: "Rohan Keshri — Full Stack Developer",
     description:
-      "Full Stack Developer building performant web applications with React, Next.js, Node.js, and modern databases.",
+      "Full Stack Developer building practical web applications, AI products, and developer tools using React, Node.js, Express, PostgreSQL, and MongoDB.",
     siteName: "Rohan Keshri Portfolio",
   },
   twitter: {
     card: "summary_large_image",
     title: "Rohan Keshri — Full Stack Developer",
     description:
-      "Full Stack Developer building performant web applications with React, Next.js, Node.js, and modern databases.",
+      "Full Stack Developer building practical web applications, AI products, and developer tools.",
     creator: "@keshrirohan",
   },
   robots: {

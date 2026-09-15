@@ -1,5 +1,5 @@
 import { Mail, Code } from "lucide-react";
-import { GithubIcon, LinkedinIcon } from "@/components/icons";
+import { GithubIcon, LinkedinIcon, LeetCodeIcon } from "@/components/icons";
 import { profile } from "@/data/portfolio";
 
 export function Footer() {
@@ -47,6 +47,15 @@ export function Footer() {
             aria-label="LinkedIn"
           >
             <LinkedinIcon className="w-4 h-4" />
+          </a>
+          <a
+            href={profile.leetcode}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-foreground transition-colors p-1"
+            aria-label="LeetCode"
+          >
+            <LeetCodeIcon className="w-4 h-4" />
           </a>
           <a
             href={`mailto:${profile.email}`}

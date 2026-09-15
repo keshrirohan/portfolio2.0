@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { ArrowRight, Download, Mail, Terminal as TerminalIcon, Sparkles } from "lucide-react";
+import { GithubIcon } from "@/components/icons";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { profile } from "@/data/portfolio";
@@ -37,6 +38,7 @@ export function Hero() {
     "PostgreSQL",
     "MongoDB",
     "TypeScript",
+    "Docker",
   ];
 
   const drawFrame = React.useCallback((frameIndex: number) => {
@@ -301,7 +303,7 @@ export function Hero() {
             ref={headingRef}
             className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.1] mb-3 sm:mb-5 text-foreground max-w-[580px]"
           >
-            Full Stack Developer
+            Full Stack Developer building practical web apps, AI products, and developer tools.
           </h1>
 
           {/* Professional Summary */}
@@ -344,11 +346,24 @@ export function Hero() {
               <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </Link>
 
-            <Link
-              href="#contact"
+            <a
+              href={profile.github}
+              target="_blank"
+              rel="noopener noreferrer"
               className={cn(
                 buttonVariants({ size: "lg", variant: "outline" }),
                 "w-full sm:w-auto rounded-full gap-2 px-5 sm:px-6 font-semibold text-xs sm:text-sm focus-visible:ring-2 focus-visible:ring-primary"
+              )}
+            >
+              <GithubIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span>GitHub</span>
+            </a>
+
+            <Link
+              href="#contact"
+              className={cn(
+                buttonVariants({ size: "lg", variant: "ghost" }),
+                "w-full sm:w-auto rounded-full gap-2 px-5 sm:px-6 font-medium text-xs sm:text-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
               )}
             >
               <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -356,7 +371,7 @@ export function Hero() {
             </Link>
 
             <a
-              href="#contact"
+              href={profile.resumeUrl}
               className={cn(
                 buttonVariants({ size: "lg", variant: "ghost" }),
                 "w-full sm:w-auto rounded-full gap-2 px-5 sm:px-6 font-medium text-xs sm:text-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
@@ -391,13 +406,13 @@ export function Hero() {
                 name: <span className="text-emerald-400/90">&quot;Rohan Keshri&quot;</span>,
               </p>
               <p className="pl-3">
-                role: <span className="text-amber-300/90">&quot;Full Stack Engineer&quot;</span>,
+                role: <span className="text-amber-300/90">&quot;Full Stack Developer&quot;</span>,
               </p>
               <p className="pl-3">
                 leetcodeSolved: <span className="text-sky-300/90">140</span>,
               </p>
               <p className="pl-3">
-                githubStreak: <span className="text-purple-300/90">&quot;100+ Days&quot;</span>,
+                githubStreak: <span className="text-purple-300/90">&quot;111 Days&quot;</span>,
               </p>
               <p className="pl-3">
                 status: <span className="text-emerald-400/90">&quot;Building scalable products&quot;</span>

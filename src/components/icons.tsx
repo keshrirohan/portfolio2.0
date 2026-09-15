@@ -40,3 +40,23 @@ export function LinkedinIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function LeetCodeIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M16.102 17.93l-2.697 2.607c-.466.467-1.111.662-1.823.662s-1.357-.195-1.824-.662l-4.332-4.363c-.467-.467-.702-1.15-.702-1.863s.235-1.357.702-1.824l4.319-4.38c.467-.467 1.125-.645 1.837-.645s1.357.195 1.823.662l2.697 2.606c.514.515 1.365.497 1.9-.038.535-.536.553-1.387.039-1.901l-2.609-2.519c-.756-.757-1.754-1.165-2.835-1.141l.028-2.667c1.56-.016 3.04.59 4.139 1.689l4.273 4.187c1.163 1.163 1.163 3.049 0 4.211L18.1 19.614c-1.099 1.099-2.58 1.705-4.139 1.689l-.028-2.667c1.081.024 2.079-.384 2.835-1.141l.011-.011c.502-.502.504-1.371.011-1.877l-.688-.677z" />
+      <path d="M8.5 12h8" />
+    </svg>
+  );
+}

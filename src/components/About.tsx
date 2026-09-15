@@ -83,13 +83,13 @@ export function About() {
           {/* Left Column: Story / Bio */}
           <div ref={leftColRef} className="lg:col-span-7 space-y-6 text-muted-foreground text-base leading-relaxed">
             <p>
-              I am a <strong className="text-foreground font-semibold">Full Stack Developer</strong> and Computer Science Engineering student dedicated to building high-performance web applications with modular software design.
+              I am a <strong className="text-foreground font-semibold">Full Stack Developer</strong> and Computer Science Engineering student with hands-on internship experience building responsive, production-grade web applications.
             </p>
             <p>
-              My expertise spans the modern web stack—from architecting frontend interfaces in <span className="text-foreground font-medium">React and Next.js</span> to engineering robust REST APIs and database layers with <span className="text-foreground font-medium">Node.js, Express, PostgreSQL, and MongoDB</span>.
+              My stack spans the modern web — from frontend interfaces in <span className="text-foreground font-medium">React.js and Next.js</span> to robust REST APIs and database layers with <span className="text-foreground font-medium">Node.js, Express.js, PostgreSQL, and MongoDB</span>. I also work with <span className="text-foreground font-medium">Prisma ORM, JWT authentication, Docker, and CI/CD pipelines</span>.
             </p>
             <p>
-              I take pride in solving non-trivial problems, whether automating developer workflows with Chrome Extensions, engineering voice-driven AI platforms, or analyzing real-time pose tracking algorithms.
+              I have shipped developer tooling (Chrome extensions with Manifest V3), AI-powered SaaS platforms, and real-time sports tracking systems. I am comfortable across the full development lifecycle — from designing database schemas and building APIs to debugging production issues and conducting code reviews.
             </p>
 
             <div className="pt-4 flex flex-wrap items-center gap-6 text-sm text-foreground/80">

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Trophy, Award, FileCheck, Flame } from "lucide-react";
+import { Trophy, Award, FileCheck, Flame, GitCommit } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { achievements } from "@/data/portfolio";
@@ -16,6 +16,7 @@ export function Achievements() {
     Finalist: Award,
     "Research Publication": FileCheck,
     "Coding Milestone": Flame,
+    "Open Source": GitCommit,
   };
 
   React.useEffect(() => {

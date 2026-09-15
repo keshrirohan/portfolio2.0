@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Mail, Copy, Check, ArrowUpRight, Sparkles } from "lucide-react";
-import { GithubIcon, LinkedinIcon } from "@/components/icons";
+import { Mail, Copy, Check, ArrowUpRight, Sparkles, Phone } from "lucide-react";
+import { GithubIcon, LinkedinIcon, LeetCodeIcon } from "@/components/icons";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -113,6 +113,14 @@ export function Contact() {
           </Card>
         </div>
 
+        {/* Phone */}
+        <div className="flex items-center gap-2 mb-8 text-sm text-muted-foreground">
+          <Phone className="w-4 h-4 text-primary" />
+          <a href={`tel:${profile.phone}`} className="hover:text-foreground transition-colors font-mono">
+            {profile.phone}
+          </a>
+        </div>
+
         {/* Direct Channel Action Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-3 w-full max-w-md">
           <a
@@ -142,6 +150,17 @@ export function Contact() {
           >
             <GithubIcon className="w-4 h-4" />
             <span>GitHub</span>
+            <ArrowUpRight className="w-3.5 h-3.5 text-muted-foreground" />
+          </a>
+
+          <a
+            href={profile.leetcode}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(buttonVariants({ size: "lg", variant: "outline" }), "rounded-full gap-2 px-6 font-semibold flex-1 min-w-[140px] focus-visible:ring-2 focus-visible:ring-primary")}
+          >
+            <LeetCodeIcon className="w-4 h-4" />
+            <span>LeetCode</span>
             <ArrowUpRight className="w-3.5 h-3.5 text-muted-foreground" />
           </a>
         </div>
