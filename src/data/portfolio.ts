@@ -261,7 +261,7 @@ export const projects: Project[] = [
       "Implemented full SaaS billing flow with Stripe webhook validation.",
       "Designed dark-mode candidate dashboard with analytical score visualizations.",
     ],
-    github: "",
+    github: "https://github.com/keshrirohan/Ai_Interview.git",
     live: "https://ai-interview-6iv5.onrender.com/",
     featured: true,
   },
