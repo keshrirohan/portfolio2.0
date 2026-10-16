@@ -364,10 +364,10 @@ export const education: EducationItem[] = [
 export const certifications: CertificationItem[] = [
   {
     id: "cert-1",
-    title: "Python Full Stack Developer Virtual Internship",
-    issuer: "EduSkills Academy",
-    issueDate: "2024",
+    title: "MERN Stack Developer Virtual Internship",
+    issuer: "Slytherin Edu Pvt. Ltd.",
+    issueDate: "Jul 2024",
     description:
-      "Completed a comprehensive virtual internship covering Python backend architecture, database integration, and full-stack web application development.",
+      "Completed a MERN Stack internship building responsive UI components for a job portal using React.js, integrating frontend screens with backend APIs, and leading a team of 4–5 members to deliver production features.",
   },
 ];
