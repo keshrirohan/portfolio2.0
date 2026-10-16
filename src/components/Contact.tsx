@@ -124,7 +124,9 @@ export function Contact() {
         {/* Direct Channel Action Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-3 w-full max-w-md">
           <a
-            href={`mailto:${profile.email}`}
+            href={`https://mail.google.com/mail/?view=cm&to=${profile.email}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className={cn(buttonVariants({ size: "lg" }), "rounded-full gap-2 px-6 font-semibold flex-1 min-w-[140px] focus-visible:ring-2 focus-visible:ring-primary")}
           >
             <Mail className="w-4 h-4" />

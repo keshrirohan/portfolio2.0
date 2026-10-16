@@ -84,7 +84,7 @@ export const socialLinks = [
   { label: "GitHub", href: profile.github, icon: "Github" },
   { label: "LinkedIn", href: profile.linkedin, icon: "Linkedin" },
   { label: "LeetCode", href: profile.leetcode, icon: "Code2" },
-  { label: "Email", href: `mailto:${profile.email}`, icon: "Mail" },
+  { label: "Email", href: `https://mail.google.com/mail/?view=cm&to=${profile.email}`, icon: "Mail" },
 ];
 
 export const skillCategories: SkillCategory[] = [
