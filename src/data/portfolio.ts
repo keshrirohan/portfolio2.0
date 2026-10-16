@@ -70,7 +70,7 @@ export const profile = {
   linkedin: "https://linkedin.com/in/rohan-keshri06/",
   leetcode: "https://leetcode.com/u/keshrirohan06/",
   portfolio: "https://rohankeshri.dev/",
-  resumeUrl: "#",
+  resumeUrl: "https://drive.google.com/file/d/19f1of3cvi_vQ82q1c6V3BoSJ2qhBIwvU/view?usp=sharing",
   metrics: [
     { label: "LeetCode Solved", value: "140+", icon: "Code2" },
     { label: "GitHub Streak", value: "111 Days", icon: "Flame" },

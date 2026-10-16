@@ -102,7 +102,9 @@ export function Navbar() {
           </Tooltip>
 
           <a
-            href="#contact"
+            href={profile.resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className={buttonVariants({ size: "sm", className: "rounded-full gap-1.5 font-medium ml-1" })}
           >
             <FileText className="w-3.5 h-3.5" />
@@ -166,8 +168,9 @@ export function Navbar() {
                   </a>
                 </div>
                 <a
-                  href="#contact"
-                  onClick={() => setIsOpen(false)}
+                  href={profile.resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={buttonVariants({ className: "w-full rounded-xl gap-2 font-medium" })}
                 >
                   <FileText className="w-4 h-4" />

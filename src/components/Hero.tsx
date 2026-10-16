@@ -372,6 +372,8 @@ export function Hero() {
 
             <a
               href={profile.resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className={cn(
                 buttonVariants({ size: "lg", variant: "ghost" }),
                 "w-full sm:w-auto rounded-full gap-2 px-5 sm:px-6 font-medium text-xs sm:text-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
