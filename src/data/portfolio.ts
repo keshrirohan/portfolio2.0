@@ -291,7 +291,7 @@ export const projects: Project[] = [
       "Supports 50+ concurrent events and active users.",
       "Reduced page load time by 30% through API and rendering optimizations.",
     ],
-    github: "",
+    github: "https://github.com/keshrirohan/AthletiQ.git",
     live: "https://athletiqns.vercel.app/",
     featured: true,
   },
