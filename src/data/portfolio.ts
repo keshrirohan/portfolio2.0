@@ -226,7 +226,7 @@ export const projects: Project[] = [
       "111-day coding streak preserved with correct historical timestamps.",
       "Supports 20+ programming languages with 55 Jest tests.",
     ],
-    github: "https://github.com/keshrirohan/Code_Sync",
+    github: "https://github.com/keshrirohan/Code_Sync.git",
     live: "",
     featured: true,
   },
